@@ -1,5 +1,5 @@
 import { members } from '@/data/members'
-import tagsJson from '@/data/tags.json'
+import tagsJson from '@/data/scripts/tags.json'
 
 export interface Tags {
   video_id: string
