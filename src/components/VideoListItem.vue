@@ -11,23 +11,34 @@ interface Props {
 const props = defineProps<Props>()
 
 const channel = channels[props.video.channel_id]
-const videoUrl = 'https://youtube.com/watch?v=' + props.video.video_id
-const channelUrl = 'https://www.youtube.com/channel/' + channel.channel_id
+const getChannelUrl = () => {
+  return 'https://www.youtube.com/channel/' + channel.channel_id
+}
+const getVideoUrl = () => {
+  const isShorts =
+    props.video.title.toLowerCase().indexOf('shorts') >= 0 ||
+    props.video.duration.indexOf('M') == -1
+
+  if (isShorts) {
+    return 'https://www.youtube.com/shorts/' + props.video.video_id
+  }
+  return 'https://youtube.com/watch?v=' + props.video.video_id
+}
 </script>
 
 <template>
   <div>
-    <a :href="videoUrl" target="_blank">
+    <a :href="getVideoUrl()" target="_blank">
       <img :src="video.thumbnails.medium.url" :alt="video.title" class="w-full rounded-lg" />
     </a>
     <h2 class="video-title">
-      <a :href="videoUrl" target="_blank">{{ video.title }}</a>
+      <a :href="getVideoUrl()" target="_blank">{{ video.title }}</a>
     </h2>
     <div class="flex justify-start items-center gap-4">
-      <a :href="channelUrl" target="_blank">
+      <a :href="getChannelUrl()" target="_blank">
         <img :src="channel.thumbnails.default.url" class="w-10 h-10 object-contain" />
       </a>
-      <a :href="channelUrl" target="_blank" class="channel-title">
+      <a :href="getChannelUrl()" target="_blank" class="channel-title">
         {{ channel.title }}
       </a>
     </div>
