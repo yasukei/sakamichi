@@ -2,9 +2,11 @@
 name: Deploy static content to Pages
 
 on:
-  # Runs on pushes targeting the default branch
   push:
     branches: ['main']
+  schedule:
+    # nightly build
+    - cron: '0 17 * * *' # UTC 17:00 == JST 2:00am
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
