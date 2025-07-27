@@ -1,0 +1,35 @@
+{
+  "金村美玖": { "name": "金村美玖", "batch": 2, "order": 1, "graduated": false },
+  "河田陽菜": { "name": "河田陽菜", "batch": 2, "order": 2, "graduated": false },
+  "小坂菜緒": { "name": "小坂菜緒", "batch": 2, "order": 3, "graduated": false },
+  "富田鈴花": { "name": "富田鈴花", "batch": 2, "order": 4, "graduated": false },
+  "松田好花": { "name": "松田好花", "batch": 2, "order": 5, "graduated": false },
+
+  "上村ひなの": { "name": "上村ひなの", "batch": 3, "order": 1, "graduated": false },
+  "髙橋未来虹": { "name": "髙橋未来虹", "batch": 3, "order": 2, "graduated": false },
+  "森本茉莉": { "name": "森本茉莉", "batch": 3, "order": 3, "graduated": false },
+  "山口陽世": { "name": "山口陽世", "batch": 3, "order": 4, "graduated": false },
+
+  "石塚瑶季": { "name": "石塚瑶季", "batch": 4, "order": 1, "graduated": false },
+  "小西夏菜実": { "name": "小西夏菜実", "batch": 4, "order": 2, "graduated": false },
+  "清水理央": { "name": "清水理央", "batch": 4, "order": 3, "graduated": false },
+  "正源司陽子": { "name": "正源司陽子", "batch": 4, "order": 4, "graduated": false },
+  "竹内希来里": { "name": "竹内希来里", "batch": 4, "order": 5, "graduated": false },
+  "平尾帆夏": { "name": "平尾帆夏", "batch": 4, "order": 6, "graduated": false },
+  "平岡海月": { "name": "平岡海月", "batch": 4, "order": 7, "graduated": false },
+  "藤嶌果歩": { "name": "藤嶌果歩", "batch": 4, "order": 8, "graduated": false },
+  "宮地すみれ": { "name": "宮地すみれ", "batch": 4, "order": 9, "graduated": false },
+  "山下葉留花": { "name": "山下葉留花", "batch": 4, "order": 10, "graduated": false },
+  "渡辺莉奈": { "name": "渡辺莉奈", "batch": 4, "order": 11, "graduated": false },
+
+  "大田美月": { "name": "大田美月", "batch": 5, "order": 1, "graduated": false },
+  "大野愛実": { "name": "大野愛実", "batch": 5, "order": 2, "graduated": false },
+  "片山紗希": { "name": "片山紗希", "batch": 5, "order": 3, "graduated": false },
+  "蔵盛妃那乃": { "name": "蔵盛妃那乃", "batch": 5, "order": 4, "graduated": false },
+  "坂井新奈": { "name": "坂井新奈", "batch": 5, "order": 5, "graduated": false },
+  "佐藤優羽": { "name": "佐藤優羽", "batch": 5, "order": 6, "graduated": false },
+  "下田衣珠季": { "name": "下田衣珠季", "batch": 5, "order": 7, "graduated": false },
+  "高井俐香": { "name": "高井俐香", "batch": 5, "order": 8, "graduated": false },
+  "鶴崎仁香": { "name": "鶴崎仁香", "batch": 5, "order": 9, "graduated": false },
+  "松尾桜": { "name": "松尾桜", "batch": 5, "order": 10, "graduated": false }
+}

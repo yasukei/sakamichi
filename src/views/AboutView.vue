@@ -1,15 +1,27 @@
+<script setup lang="ts"></script>
+
 <template>
-  <div class="about">
-    <h1>This is an about page</h1>
+  <div>
+    <h1>このサイトについて</h1>
+    <p>工事中です。</p>
+    <!-- <ul>
+      <li>Youtubeで公開されている日向坂46の動画を一覧できます。</li>
+    </ul> -->
   </div>
 </template>
 
-<style>
-@media (min-width: 1024px) {
-  .about {
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-  }
+<style lang="postcss" scoped>
+@reference "../assets/main.css";
+
+h1 {
+  @apply text-2xl mb-4;
+}
+
+ul {
+  @apply list-inside ml-6;
+}
+
+li {
+  @apply list-disc -indent-5 mb-2;
 }
 </style>
