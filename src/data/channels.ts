@@ -1,5 +1,5 @@
 import { type Thumbnail } from '@/data/thumbnail.d'
-import channelsJson from '@/data/channels.json'
+import channelsJson from '@/data/scripts/channels.json'
 
 export interface Channel {
   channel_id: string

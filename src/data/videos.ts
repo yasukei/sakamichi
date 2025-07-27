@@ -1,5 +1,5 @@
 import { type Thumbnail } from '@/data/thumbnail.d'
-import videoJson from '@/data/videos.json'
+import videoJson from '@/data/scripts/videos.json'
 
 export interface Video {
   video_id: string
