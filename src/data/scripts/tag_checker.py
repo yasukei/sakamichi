@@ -14,6 +14,7 @@ def main():
     untags = {}
     for video_id in untagged_video_ids:
         untags[video_id] = {
+                'title': videos[video_id]['title'],
                 'video_id': video_id,
                 'tags': [],
             }
