@@ -1,4 +1,6 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import MetaInfo from '@/components/MetaInfo.vue'
+</script>
 
 <template>
   <div>
@@ -7,6 +9,7 @@
     <!-- <ul>
       <li>Youtubeで公開されている日向坂46の動画を一覧できます。</li>
     </ul> -->
+    <MetaInfo title="About" />
   </div>
 </template>
 

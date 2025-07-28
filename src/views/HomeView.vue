@@ -1,9 +1,10 @@
 <script setup lang="ts">
+import { ref } from 'vue'
 import { videos } from '@/data/videos'
 import TagFilter from '@/components/TagFilter.vue'
 import VideoList from '@/components/VideoList.vue'
 import IconFunnel from '@/components/icons/IconFunnel.vue'
-import { ref } from 'vue'
+import MetaInfo from '@/components/MetaInfo.vue'
 
 const showModal = ref(false)
 const onFunnelClicked = () => {
@@ -35,6 +36,8 @@ const onFunnelClicked = () => {
         <IconFunnel :solid-icon="showModal" />
       </button>
     </div>
+
+    <MetaInfo title="Home" />
   </div>
 </template>
 

@@ -14,4 +14,7 @@ export default defineConfig({
     },
   },
   base: '/sakamichi/',
+  define: {
+    __APP_TITLE__: JSON.stringify('日向坂'),
+  },
 })
