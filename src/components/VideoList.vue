@@ -4,11 +4,13 @@ import { getTags } from '@/data/tags'
 import { useSelectedTagsStore } from '@/stores/selectedTags.ts'
 import VideoListItem from './VideoListItem.vue'
 import { getChannelTitle } from '@/data/channels.ts'
+import InfiniteScroll from './InfiniteScroll.vue'
+import { ref } from 'vue'
 
 interface Props {
   videos: Video[]
 }
-defineProps<Props>()
+const props = defineProps<Props>()
 
 const { selectedTags } = useSelectedTagsStore()
 
@@ -31,16 +33,41 @@ const containSelectedTags = (video: Video) => {
 
   return contain(tagsSet, selectedTags)
 }
+
+const perPage = 10
+const lastItem = ref(perPage)
+const videoItems = ref<Video[]>(props.videos.slice(0, lastItem.value))
+
+const fetchItems = (resolve: (hasMoreData: boolean) => void) => {
+  setTimeout(() => {
+    let actuallyAdded = 0
+    while (true) {
+      const newItems = props.videos.slice(lastItem.value, lastItem.value + perPage)
+      videoItems.value.push(...newItems)
+      lastItem.value += newItems.length
+
+      actuallyAdded += newItems.filter((item) => containSelectedTags(item)).length
+      if (actuallyAdded >= perPage || lastItem.value >= props.videos.length) {
+        break
+      }
+    }
+
+    const hasMoveItems = lastItem.value < props.videos.length
+    resolve(hasMoveItems)
+  }, 0.1 * 1000)
+}
 </script>
 
 <template>
-  <TransitionGroup name="list" tag="ul">
-    <template v-for="video in videos" :key="video.video_id">
-      <li v-show="containSelectedTags(video)">
-        <VideoListItem :video="video" />
-      </li>
-    </template>
-  </TransitionGroup>
+  <InfiniteScroll @fetch="fetchItems">
+    <TransitionGroup name="list" tag="ul">
+      <template v-for="video in videoItems" :key="video.video_id">
+        <li v-show="containSelectedTags(video)">
+          <VideoListItem :video="video" />
+        </li>
+      </template>
+    </TransitionGroup>
+  </InfiniteScroll>
 </template>
 
 <style lang="postcss" scoped>
@@ -57,6 +84,6 @@ li {
 
 .list-enter-from,
 .list-leave-to {
-  @apply opacity-0 translate-x-30;
+  @apply opacity-0;
 }
 </style>
