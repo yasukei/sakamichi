@@ -45,7 +45,7 @@ const getVideoUrl = () => {
     <time class="video-datetime" :datetime="video.published_at">{{
       formatDateString(video.published_at)
     }}</time>
-    <TagList :tags="getTags(video.video_id)" :canClick="false" />
+    <TagList :tags="getTags(video.video_id)" :canClick="true" />
   </div>
 </template>
 
