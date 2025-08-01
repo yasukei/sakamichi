@@ -42,6 +42,7 @@ const batchesGraduated = [
     memberNames: getXbatchNames(4, true),
   },
 ]
+const others = ['未分類']
 </script>
 
 <template>
@@ -69,6 +70,10 @@ const batchesGraduated = [
             <TagList :tags="batch.memberNames" :canClick="true" />
           </li>
         </ul>
+      </li>
+      <li>
+        <h3>その他</h3>
+        <TagList :tags="others" :canClick="true" />
       </li>
     </ul>
   </div>
