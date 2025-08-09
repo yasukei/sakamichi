@@ -60,7 +60,11 @@ const fetchItems = (resolve: (hasMoreData: boolean) => void) => {
 
 <template>
   <InfiniteScroll @fetch="fetchItems">
-    <TransitionGroup name="list" tag="ul">
+    <TransitionGroup
+      name="list"
+      tag="ul"
+      class="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5"
+    >
       <template v-for="video in videoItems" :key="video.video_id">
         <li v-show="containSelectedTags(video)">
           <VideoListItem :video="video" />
@@ -72,10 +76,6 @@ const fetchItems = (resolve: (hasMoreData: boolean) => void) => {
 
 <style lang="postcss" scoped>
 @reference "../assets/main.css";
-
-li {
-  @apply mb-8;
-}
 
 .list-enter-active,
 .list-leave-active {
