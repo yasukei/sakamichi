@@ -22,7 +22,7 @@ const getVideoUrl = () => {
   if (isShorts) {
     return 'https://www.youtube.com/shorts/' + props.video.video_id
   }
-  return 'https://youtube.com/watch?v=' + props.video.video_id
+  return 'https://www.youtube.com/watch?v=' + props.video.video_id
 }
 </script>
 
