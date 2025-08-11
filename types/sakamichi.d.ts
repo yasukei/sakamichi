@@ -1,3 +1,10 @@
+export interface ChannelDefinition {
+  name: string
+  channelId: string
+  isOfficial: boolean
+  isValid: boolean
+}
+
 export interface Member {
   name: string
   batch: number

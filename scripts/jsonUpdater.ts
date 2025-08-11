@@ -2,16 +2,9 @@ import fs from 'fs'
 import path from 'path'
 import { fileURLToPath } from 'url'
 
-import { Channel, Video } from '../types/youtube'
-import { Member } from '../types/sakamichi'
+import type { Channel, Video } from '../types/youtube'
+import type { ChannelDefinition, Member } from '../types/sakamichi'
 import { YoutubeApi } from './youtubeApi'
-
-interface ChannelDefinition {
-  name: string
-  channelId: string
-  isOfficial: boolean
-  isValid: boolean
-}
 
 function loadChannelDefinitions(filePath: string): ChannelDefinition[] {
   const fileContent = fs.readFileSync(filePath, 'utf-8')
@@ -49,7 +42,7 @@ function makeVideosDict(videos: Video[]): { [key: string]: Video } {
   return dict
 }
 
-function save<T>(filePath: string, content: T) {
+function saveAsJson<T>(filePath: string, content: T) {
   fs.writeFileSync(filePath, JSON.stringify(content, null, '  '), 'utf-8')
 }
 
@@ -102,7 +95,7 @@ const main = async () => {
         return true
       }
 
-      const containsKeyword = (keyword) => {
+      const containsKeyword = (keyword: string) => {
         return video.snippet.title.includes(keyword) || video.snippet.description.includes(keyword)
       }
       if (containsKeyword('日向坂')) {
@@ -125,9 +118,9 @@ const main = async () => {
     const filteredVideosDict = makeVideosDict(filteredVideos)
 
     console.info('Saving channels.json')
-    save(filePaths['channels.json'], channelsDict)
+    saveAsJson(filePaths['channels.json'], channelsDict)
     console.info('Saving videos.json')
-    save(filePaths['videos.json'], filteredVideosDict)
+    saveAsJson(filePaths['videos.json'], filteredVideosDict)
   } catch (error) {
     console.error(error)
   }
