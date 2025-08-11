@@ -1,3 +1,54 @@
+import type { Member, Tags } from '../types/sakamichi.d.ts'
+import type { Channel, Video } from '../types/youtube.d.ts'
+import membersJson from '../scripts/data/members.json'
+import channelsJson from '../scripts/data/channels.json'
+import videoJson from '../scripts/data/videos.json'
+import tagsJson from '../scripts/data/tags.json'
+
+// TODO: hide from outside
+export const members: { [key: string]: Member } = membersJson
+export const channels: { [key: string]: Channel } = channelsJson
+export const videos: { [key: string]: Video } = videoJson
+const tags: { [key: string]: Tags } = tagsJson
+
+export function getXbatchMembers(batch: number, graduated: boolean): Member[] {
+  return Object.values(members).filter(
+    (member) => member.batch === batch && member.graduated === graduated,
+  )
+}
+
+export function getXbatchNames(batch: number, graduated: boolean): string[] {
+  return getXbatchMembers(batch, graduated).map((member) => member.name)
+}
+
+export function getChannelTitle(channel_id: string): string {
+  return channels[channel_id].snippet.title
+}
+
+export function getChannelTitles(): string[] {
+  return Object.values(channels).map((channel) => channel.snippet.title)
+}
+
+export function getTags(video_id: string): string[] {
+  if (!(video_id in tags)) {
+    return ['未分類']
+  }
+
+  return tags[video_id].tags.sort((a, b) => {
+    if (!(a in members)) {
+      return 1
+    }
+    if (!(b in members)) {
+      return -1
+    }
+
+    if (members[a].batch != members[b].batch) {
+      return members[a].batch - members[b].batch
+    }
+    return members[a].order - members[b].order
+  })
+}
+
 export function formatDateString(isoString: string): string {
   const date = new Date(isoString)
 

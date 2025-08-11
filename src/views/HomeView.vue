@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { videos } from '@/data/videos'
+import { videos } from '@/utils'
 import TagFilter from '@/components/TagFilter.vue'
 import VideoList from '@/components/VideoList.vue'
 import IconFunnel from '@/components/icons/IconFunnel.vue'

@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import { getXbatchNames } from '@/data/members.ts'
-import { getChannelTitles } from '@/data/channels.ts'
+import { getChannelTitles, getXbatchNames } from '@/utils.ts'
 import TagList from '@/components/TagList.vue'
 import { useSelectedTagsStore } from '@/stores/selectedTags.ts'
 

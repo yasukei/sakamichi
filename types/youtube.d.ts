@@ -1,0 +1,66 @@
+export interface Thumbnail {
+  url: string
+  width: number
+  height: number
+}
+
+export interface Channel {
+  id: string
+  snippet: {
+    title: string
+    description: string
+    thumbnails: {
+      default: Thumbnail
+      medium: Thumbnail
+      high: Thumbnail
+    }
+  }
+  contentDetails: {
+    relatedPlaylists: {
+      uploads: string
+    }
+  }
+}
+
+export interface ChannelsResponse {
+  items: Channel[]
+}
+
+export interface PlayListItem {
+  id: string
+  snippet: {
+    publishedAt: string
+    channelId: string
+    title: string
+    description: string
+  }
+  contentDetails: {
+    videoId: string
+  }
+}
+
+export interface PlayListItemsResponse {
+  nextPageToken?: string
+  items: PlayListItem[]
+}
+
+export interface Video {
+  id: string
+  snippet: {
+    publishedAt: string
+    channelId: string
+    title: string
+    description: string
+    thumbnails: {
+      default: Thumbnail
+      medium: Thumbnail
+    }
+  }
+  contentDetails: {
+    duration: string
+  }
+}
+
+export interface VideosResponse {
+  items: Video[]
+}

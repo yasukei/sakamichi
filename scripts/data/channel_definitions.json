@@ -1,0 +1,14 @@
+[
+  {
+    "name": "日向坂ちゃんねる",
+    "channelId": "UCOB24f8lQBCnVqPZXOkVpOg",
+    "isOfficial": true,
+    "isValid": true
+  },
+  {
+    "name": "TSSオンデマンド",
+    "channelId": "UCouV316ueTMMIlXvzKoe6kA",
+    "isOfficial": false,
+    "isValid": true
+  }
+]

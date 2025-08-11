@@ -1,9 +1,8 @@
 <script setup lang="ts">
-import { type Video } from '@/data/videos.ts'
-import { getTags } from '@/data/tags'
+import type { Video } from '../../types/youtube.d.ts'
+import { getTags, getChannelTitle } from '@/utils'
 import { useSelectedTagsStore } from '@/stores/selectedTags.ts'
 import VideoListItem from './VideoListItem.vue'
-import { getChannelTitle } from '@/data/channels.ts'
 import InfiniteScroll from './InfiniteScroll.vue'
 import { ref } from 'vue'
 
@@ -28,7 +27,7 @@ function contain(superset: Set<string>, subset: Set<string>): boolean {
 }
 
 const containSelectedTags = (video: Video) => {
-  const tags = getTags(video.video_id).concat([getChannelTitle(video.channel_id)])
+  const tags = getTags(video.id).concat([getChannelTitle(video.snippet.channelId)])
   const tagsSet = new Set<string>(tags)
 
   return contain(tagsSet, selectedTags)
