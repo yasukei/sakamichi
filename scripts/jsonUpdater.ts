@@ -2,57 +2,35 @@ import fs from 'fs'
 import path from 'path'
 import { fileURLToPath } from 'url'
 
-import type { Channel, Video } from '../types/youtube'
+import type { Video } from '../types/youtube'
 import type { ChannelDefinition, Member } from '../types/sakamichi'
 import { YoutubeApi } from './youtubeApi'
 
-function loadChannelDefinitions(filePath: string): ChannelDefinition[] {
+function loadJson<T>(filePath: string): T {
   const fileContent = fs.readFileSync(filePath, 'utf-8')
   return JSON.parse(fileContent)
-}
-
-function loadMembersDict(filePath: string): { [key: string]: Member } {
-  const fileContent = fs.readFileSync(filePath, 'utf-8')
-  return JSON.parse(fileContent)
-}
-
-function makeChannelDefinitionsDict(channelDefinitions: ChannelDefinition[]): {
-  [key: string]: ChannelDefinition
-} {
-  const dict = channelDefinitions.reduce((dict, channelDefinition) => {
-    dict[channelDefinition.channelId] = channelDefinition
-    return dict
-  }, {})
-  return dict
-}
-
-function makeChannelsDict(channels: Channel[]): { [key: string]: Channel } {
-  const dict = channels.reduce((dict, channel) => {
-    dict[channel.id] = channel
-    return dict
-  }, {})
-  return dict
-}
-
-function makeVideosDict(videos: Video[]): { [key: string]: Video } {
-  const dict = videos.reduce((dict, video) => {
-    dict[video.id] = video
-    return dict
-  }, {})
-  return dict
 }
 
 function saveAsJson<T>(filePath: string, content: T) {
   fs.writeFileSync(filePath, JSON.stringify(content, null, '  '), 'utf-8')
 }
 
+function makeDict<T>(array: T[], keyMemberName: string): { [key: string]: T } {
+  const dict = array.reduce((dict, elem) => {
+    dict[elem[keyMemberName]] = elem
+    return dict
+  }, {})
+  return dict
+}
+
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 const filePaths = {
   'channel_definitions.json': __dirname + '/data/channel_definitions.json',
-  'channels.json': __dirname + '/data/channels.json',
-  'videos.json': __dirname + '/data/videos.json',
+  'channelsDict.json': __dirname + '/data/channelsDict.json',
+  'videosDict.json': __dirname + '/data/videosDict.json',
   'members.json': __dirname + '/data/members.json',
+  'membersDict.json': __dirname + '/data/membersDict.json',
 }
 const apiKey = process.env.GOOGLE_API_KEY
 if (!apiKey) {
@@ -64,18 +42,19 @@ const main = async () => {
     const youtubeApi = new YoutubeApi(apiKey)
 
     console.info('Loading channel_definitions.json')
-    const channelDefinitions = loadChannelDefinitions(filePaths['channel_definitions.json'])
-    const channelDefinitionsDict = makeChannelDefinitionsDict(channelDefinitions)
+    const channelDefinitions = loadJson<ChannelDefinition[]>(filePaths['channel_definitions.json'])
+    const channelDefinitionsDict = makeDict(channelDefinitions, 'channelId')
     const channelIds = channelDefinitions
       .filter((channelDefinition) => channelDefinition.isValid)
       .map((channelDefinition) => channelDefinition.channelId)
 
     console.info('Loading members.json')
-    const membersDict = loadMembersDict(filePaths['members.json'])
+    const members = loadJson<Member[]>(filePaths['members.json'])
+    const membersDict = makeDict(members, 'name')
 
     console.info('Getting channels information from YoutubeApi')
     const channels = await youtubeApi.getChannels(channelIds)
-    const channelsDict = makeChannelsDict(channels)
+    const channelsDict = makeDict(channels, 'id')
 
     console.info('Getting videos information from YoutubeApi')
     const allVideos = await channels.reduce<Promise<Video[]>>(async (videosPromise, channel) => {
@@ -115,12 +94,14 @@ const main = async () => {
       }
       return 0
     })
-    const filteredVideosDict = makeVideosDict(filteredVideos)
+    const filteredVideosDict = makeDict(filteredVideos, 'id')
 
-    console.info('Saving channels.json')
-    saveAsJson(filePaths['channels.json'], channelsDict)
-    console.info('Saving videos.json')
-    saveAsJson(filePaths['videos.json'], filteredVideosDict)
+    console.info('Saving channelsDict.json')
+    saveAsJson(filePaths['channelsDict.json'], channelsDict)
+    console.info('Saving videosDict.json')
+    saveAsJson(filePaths['videosDict.json'], filteredVideosDict)
+    console.info('Saving membersDict.json')
+    saveAsJson(filePaths['membersDict.json'], membersDict)
   } catch (error) {
     console.error(error)
   }

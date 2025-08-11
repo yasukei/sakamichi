@@ -34,6 +34,7 @@ playwright-report/
 
 .env
 __pycache__/
-scripts/data/channels.json
-scripts/data/videos.json
-scripts/data/untags.json
+scripts/data/membersDict.json
+scripts/data/channelsDict.json
+scripts/data/videosDict.json
+scripts/data/untagsDict.json
