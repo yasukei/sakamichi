@@ -3,7 +3,7 @@ import path from 'path'
 import { fileURLToPath } from 'url'
 
 import type { Video } from '../types/youtube'
-import type { ChannelDefinition, Member } from '../types/sakamichi'
+import type { ChannelDefinition, Member, Tags } from '../types/sakamichi'
 import { YoutubeApi } from './youtubeApi'
 
 function loadJson<T>(filePath: string): T {
@@ -23,6 +23,23 @@ function makeDict<T>(array: T[], keyMemberName: string): { [key: string]: T } {
   return dict
 }
 
+function makeUntagsDict(
+  videos: Video[],
+  tagsDict: { [key: string]: Tags },
+): { [key: string]: Tags } {
+  const untaggedVideos = videos.filter((video) => {
+    return !(video.id in tagsDict)
+  })
+  const untags: Tags[] = untaggedVideos.map((untaggedVideo) => {
+    return {
+      title: untaggedVideo.snippet.title,
+      videoId: untaggedVideo.id,
+      tags: [],
+    }
+  })
+  return makeDict(untags, 'videoId')
+}
+
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 const filePaths = {
@@ -31,6 +48,8 @@ const filePaths = {
   'videosDict.json': __dirname + '/data/videosDict.json',
   'members.json': __dirname + '/data/members.json',
   'membersDict.json': __dirname + '/data/membersDict.json',
+  'tagsDict.json': __dirname + '/data/tagsDict.json',
+  'untagsDict.json': __dirname + '/data/untagsDict.json',
 }
 const apiKey = process.env.GOOGLE_API_KEY
 if (!apiKey) {
@@ -51,6 +70,9 @@ const main = async () => {
     console.info('Loading members.json')
     const members = loadJson<Member[]>(filePaths['members.json'])
     const membersDict = makeDict(members, 'name')
+
+    console.info('Loading tagsDict.json')
+    const tagsDict = loadJson<{ [key: string]: Tags }>(filePaths['tagsDict.json'])
 
     console.info('Getting channels information from YoutubeApi')
     const channels = await youtubeApi.getChannels(channelIds)
@@ -96,12 +118,17 @@ const main = async () => {
     })
     const filteredVideosDict = makeDict(filteredVideos, 'id')
 
+    console.info('Checking untagged videos')
+    const untagsDict = makeUntagsDict(filteredVideos, tagsDict)
+
     console.info('Saving channelsDict.json')
     saveAsJson(filePaths['channelsDict.json'], channelsDict)
     console.info('Saving videosDict.json')
     saveAsJson(filePaths['videosDict.json'], filteredVideosDict)
     console.info('Saving membersDict.json')
     saveAsJson(filePaths['membersDict.json'], membersDict)
+    console.info('Saving untagsDict.json')
+    saveAsJson(filePaths['untagsDict.json'], untagsDict)
   } catch (error) {
     console.error(error)
   }
