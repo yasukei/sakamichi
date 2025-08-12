@@ -6,6 +6,16 @@ import type { Video } from '../types/youtube'
 import type { ChannelDefinition, Member, Tags } from '../types/sakamichi'
 import { YoutubeApi } from './youtubeApi'
 
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
+const CHANNEL_DEFINITIONS_JSON = __dirname + '/data/channel_definitions.json'
+const CHANNELS_DICT_JSON = __dirname + '/data/channelsDict.json'
+const VIDEOS_DICT_JSON = __dirname + '/data/videosDict.json'
+const MEMBERS_JSON = __dirname + '/data/members.json'
+const MEMBERS_DICT_JSON = __dirname + '/data/membersDict.json'
+const TAGS_DICT_JSON = __dirname + '/data/tagsDict.json'
+const UNTAGS_DICT_JSON = __dirname + '/data/untagsDict.json'
+
 function loadJson<T>(filePath: string): T {
   const fileContent = fs.readFileSync(filePath, 'utf-8')
   return JSON.parse(fileContent)
@@ -40,17 +50,6 @@ function makeUntagsDict(
   return makeDict(untags, 'videoId')
 }
 
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = path.dirname(__filename)
-const filePaths = {
-  'channel_definitions.json': __dirname + '/data/channel_definitions.json',
-  'channelsDict.json': __dirname + '/data/channelsDict.json',
-  'videosDict.json': __dirname + '/data/videosDict.json',
-  'members.json': __dirname + '/data/members.json',
-  'membersDict.json': __dirname + '/data/membersDict.json',
-  'tagsDict.json': __dirname + '/data/tagsDict.json',
-  'untagsDict.json': __dirname + '/data/untagsDict.json',
-}
 const apiKey = process.env.GOOGLE_API_KEY
 if (!apiKey) {
   throw new Error('GOOGLE_API_KEY is not defined in environment variables.')
@@ -60,19 +59,19 @@ const main = async () => {
   try {
     const youtubeApi = new YoutubeApi(apiKey)
 
-    console.info('Loading channel_definitions.json')
-    const channelDefinitions = loadJson<ChannelDefinition[]>(filePaths['channel_definitions.json'])
+    console.info(`Loading ${CHANNEL_DEFINITIONS_JSON}`)
+    const channelDefinitions = loadJson<ChannelDefinition[]>(CHANNEL_DEFINITIONS_JSON)
     const channelDefinitionsDict = makeDict(channelDefinitions, 'channelId')
     const channelIds = channelDefinitions
       .filter((channelDefinition) => channelDefinition.isValid)
       .map((channelDefinition) => channelDefinition.channelId)
 
-    console.info('Loading members.json')
-    const members = loadJson<Member[]>(filePaths['members.json'])
+    console.info(`Loading ${MEMBERS_JSON}`)
+    const members = loadJson<Member[]>(MEMBERS_JSON)
     const membersDict = makeDict(members, 'name')
 
-    console.info('Loading tagsDict.json')
-    const tagsDict = loadJson<{ [key: string]: Tags }>(filePaths['tagsDict.json'])
+    console.info(`Loading ${TAGS_DICT_JSON}`)
+    const tagsDict = loadJson<{ [key: string]: Tags }>(TAGS_DICT_JSON)
 
     console.info('Getting channels information from YoutubeApi')
     const channels = await youtubeApi.getChannels(channelIds)
@@ -121,14 +120,14 @@ const main = async () => {
     console.info('Checking untagged videos')
     const untagsDict = makeUntagsDict(filteredVideos, tagsDict)
 
-    console.info('Saving channelsDict.json')
-    saveAsJson(filePaths['channelsDict.json'], channelsDict)
-    console.info('Saving videosDict.json')
-    saveAsJson(filePaths['videosDict.json'], filteredVideosDict)
-    console.info('Saving membersDict.json')
-    saveAsJson(filePaths['membersDict.json'], membersDict)
-    console.info('Saving untagsDict.json')
-    saveAsJson(filePaths['untagsDict.json'], untagsDict)
+    console.info(`Saving ${CHANNELS_DICT_JSON}`)
+    saveAsJson(CHANNELS_DICT_JSON, channelsDict)
+    console.info(`Saving ${VIDEOS_DICT_JSON}`)
+    saveAsJson(VIDEOS_DICT_JSON, filteredVideosDict)
+    console.info(`Saving ${MEMBERS_DICT_JSON}`)
+    saveAsJson(MEMBERS_DICT_JSON, membersDict)
+    console.info(`Saving ${UNTAGS_DICT_JSON}`)
+    saveAsJson(UNTAGS_DICT_JSON, untagsDict)
   } catch (error) {
     console.error(error)
   }
