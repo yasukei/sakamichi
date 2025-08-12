@@ -51,8 +51,8 @@ const fetchItems = (resolve: (hasMoreData: boolean) => void) => {
       }
     }
 
-    const hasMoveItems = lastItem.value < props.videos.length
-    resolve(hasMoveItems)
+    const hasMoreItems = lastItem.value < props.videos.length
+    resolve(hasMoreItems)
   }, 0.1 * 1000)
 }
 </script>

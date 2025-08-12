@@ -29,12 +29,12 @@ export function getChannelTitles(): string[] {
   return Object.values(channels).map((channel) => channel.snippet.title)
 }
 
-export function getTags(video_id: string): string[] {
-  if (!(video_id in tags)) {
+export function getTags(videoId: string): string[] {
+  if (!(videoId in tags)) {
     return ['未分類']
   }
 
-  return tags[video_id].tags.sort((a, b) => {
+  return tags[videoId].tags.sort((a, b) => {
     if (!(a in members)) {
       return 1
     }
