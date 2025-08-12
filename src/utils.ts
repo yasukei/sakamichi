@@ -1,4 +1,4 @@
-import type { Member, Tags } from '../types/sakamichi.d.ts'
+import type { Member, Tags, Dict } from '../types/sakamichi.d.ts'
 import type { Channel, Video } from '../types/youtube.d.ts'
 import membersDict from '../scripts/data/membersDict.json'
 import channelsDict from '../scripts/data/channelsDict.json'
@@ -6,10 +6,10 @@ import videosDict from '../scripts/data/videosDict.json'
 import tagsDict from '../scripts/data/tagsDict.json'
 
 // TODO: hide from outside
-export const members: { [key: string]: Member } = membersDict
-export const channels: { [key: string]: Channel } = channelsDict
-export const videos: { [key: string]: Video } = videosDict
-const tags: { [key: string]: Tags } = tagsDict
+export const members: Dict<Member> = membersDict
+export const channels: Dict<Channel> = channelsDict
+export const videos: Dict<Video> = videosDict
+const tags: Dict<Tags> = tagsDict
 
 export function getXbatchMembers(batch: number, graduated: boolean): Member[] {
   return Object.values(members).filter(

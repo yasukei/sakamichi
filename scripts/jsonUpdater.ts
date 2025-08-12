@@ -3,7 +3,7 @@ import path from 'path'
 import { fileURLToPath } from 'url'
 
 import type { Video } from '../types/youtube'
-import type { ChannelDefinition, Member, Tags } from '../types/sakamichi'
+import type { ChannelDefinition, Member, Tags, Dict } from '../types/sakamichi'
 import { YoutubeApi } from './youtubeApi'
 
 const __filename = fileURLToPath(import.meta.url)
@@ -25,7 +25,7 @@ function saveAsJson<T>(filePath: string, content: T) {
   fs.writeFileSync(filePath, JSON.stringify(content, null, '  '), 'utf-8')
 }
 
-function makeDict<T>(array: T[], keyMemberName: string): { [key: string]: T } {
+function makeDict<T>(array: T[], keyMemberName: string): Dict<T> {
   const dict = array.reduce((dict, elem) => {
     dict[elem[keyMemberName]] = elem
     return dict
@@ -33,10 +33,7 @@ function makeDict<T>(array: T[], keyMemberName: string): { [key: string]: T } {
   return dict
 }
 
-function makeUntagsDict(
-  videos: Video[],
-  tagsDict: { [key: string]: Tags },
-): { [key: string]: Tags } {
+function makeUntagsDict(videos: Video[], tagsDict: Dict<Tags>): Dict<Tags> {
   const untaggedVideos = videos.filter((video) => {
     return !(video.id in tagsDict)
   })
@@ -71,7 +68,7 @@ const main = async () => {
     const membersDict = makeDict(members, 'name')
 
     console.info(`Loading ${TAGS_DICT_JSON}`)
-    const tagsDict = loadJson<{ [key: string]: Tags }>(TAGS_DICT_JSON)
+    const tagsDict = loadJson<Dict<Tags>>(TAGS_DICT_JSON)
 
     console.info('Getting channels information from YoutubeApi')
     const channels = await youtubeApi.getChannels(channelIds)

@@ -17,3 +17,7 @@ export interface Tags {
   videoId: string
   tags: string[]
 }
+
+export interface Dict<T> {
+  [key: string]: T
+}
