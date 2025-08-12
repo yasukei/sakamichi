@@ -35,6 +35,10 @@ function makeDict<T>(array: T[], keyMemberName: string): Dict<T> {
   return dict
 }
 
+function containsKeyword(video: Video, keyword: string) {
+  return video.snippet.title.includes(keyword) || video.snippet.description.includes(keyword)
+}
+
 const newYoutubeApi = () => {
   const apiKey = process.env.GOOGLE_API_KEY
   if (!apiKey) {
@@ -86,9 +90,6 @@ const filterVideos = (
   members: Member[],
 ) => {
   const channelDefinitionsDict = makeDict(channelDefinitions, 'channelId')
-  const containsKeyword = (video: Video, keyword: string) => {
-    return video.snippet.title.includes(keyword) || video.snippet.description.includes(keyword)
-  }
 
   const filteredVideos = videos.filter((video) => {
     const channelDefinition = channelDefinitionsDict[video.snippet.channelId]
@@ -114,15 +115,16 @@ const sortByPublishedAtDesc = (a: Video, b: Video) => {
   return 0
 }
 
-const getUntags = (videos: Video[], tagsDict: Dict<Tags>): Tags[] => {
+const getUntags = (videos: Video[], tagsDict: Dict<Tags>, members: Member[]): Tags[] => {
   const untaggedVideos = videos.filter((video) => {
     return !(video.id in tagsDict)
   })
   return untaggedVideos.map((untaggedVideo) => {
+    const containedMembers = members.filter((member) => containsKeyword(untaggedVideo, member.name))
     return {
       title: untaggedVideo.snippet.title,
       videoId: untaggedVideo.id,
-      tags: [],
+      tags: containedMembers.map((member) => member.name),
     }
   })
 }
@@ -144,7 +146,7 @@ const main = async () => {
     filteredVideos.sort(sortByPublishedAtDesc)
 
     console.info('Getting untags')
-    const untags = getUntags(filteredVideos, tagsDict)
+    const untags = getUntags(filteredVideos, tagsDict, members)
 
     console.info('Saving files')
     const savingFiles = [
