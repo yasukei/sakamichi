@@ -34,24 +34,24 @@ const containSelectedTags = (video: Video) => {
 }
 
 const perPage = 10
-const lastItem = ref(perPage) // TODO: fix bad naming. it's not an item
-const videoItems = ref<Video[]>(props.videos.slice(0, lastItem.value))
+const lastItemIndex = ref(perPage)
+const videoItems = ref<Video[]>(props.videos.slice(0, lastItemIndex.value))
 
 const fetchItems = (resolve: (hasMoreData: boolean) => void) => {
   setTimeout(() => {
     let actuallyAdded = 0
     while (true) {
-      const newItems = props.videos.slice(lastItem.value, lastItem.value + perPage)
+      const newItems = props.videos.slice(lastItemIndex.value, lastItemIndex.value + perPage)
       videoItems.value.push(...newItems)
-      lastItem.value += newItems.length
+      lastItemIndex.value += newItems.length
 
       actuallyAdded += newItems.filter((item) => containSelectedTags(item)).length
-      if (actuallyAdded >= perPage || lastItem.value >= props.videos.length) {
+      if (actuallyAdded >= perPage || lastItemIndex.value >= props.videos.length) {
         break
       }
     }
 
-    const hasMoreItems = lastItem.value < props.videos.length
+    const hasMoreItems = lastItemIndex.value < props.videos.length
     resolve(hasMoreItems)
   }, 0.1 * 1000)
 }
