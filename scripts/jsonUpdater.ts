@@ -8,12 +8,14 @@ import { YoutubeApi } from './youtubeApi'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
+// input files
 const CHANNEL_DEFINITIONS_JSON = __dirname + '/data/channel_definitions.json'
+const MEMBERS_JSON = __dirname + '/data/members.json'
+const TAGS_DICT_JSON = __dirname + '/data/tagsDict.json'
+// output files
+const MEMBERS_DICT_JSON = __dirname + '/data/membersDict.json'
 const CHANNELS_DICT_JSON = __dirname + '/data/channelsDict.json'
 const VIDEOS_DICT_JSON = __dirname + '/data/videosDict.json'
-const MEMBERS_JSON = __dirname + '/data/members.json'
-const MEMBERS_DICT_JSON = __dirname + '/data/membersDict.json'
-const TAGS_DICT_JSON = __dirname + '/data/tagsDict.json'
 const UNTAGS_DICT_JSON = __dirname + '/data/untagsDict.json'
 
 function loadJson<T>(filePath: string): T {
@@ -33,98 +35,139 @@ function makeDict<T>(array: T[], keyMemberName: string): Dict<T> {
   return dict
 }
 
-function makeUntagsDict(videos: Video[], tagsDict: Dict<Tags>): Dict<Tags> {
+const newYoutubeApi = () => {
+  const apiKey = process.env.GOOGLE_API_KEY
+  if (!apiKey) {
+    throw new Error('GOOGLE_API_KEY is not defined in environment variables.')
+  }
+  return new YoutubeApi(apiKey)
+}
+
+const loadFiles = () => {
+  const channelDefinitions = loadJson<ChannelDefinition[]>(CHANNEL_DEFINITIONS_JSON)
+  const members = loadJson<Member[]>(MEMBERS_JSON)
+  const tagsDict = loadJson<Dict<Tags>>(TAGS_DICT_JSON)
+
+  const validChannelIds = channelDefinitions
+    .filter((channelDefinition) => channelDefinition.isValid)
+    .map((channelDefinition) => channelDefinition.channelId)
+
+  return {
+    channelDefinitions,
+    members,
+    tagsDict,
+    validChannelIds,
+  }
+}
+
+const getDataFromYoutubeApi = async (youtubeApi: YoutubeApi, validChannelIds: string[]) => {
+  const channels = await youtubeApi.getChannels(validChannelIds)
+
+  const videos = await channels.reduce<Promise<Video[]>>(async (videosPromise, channel) => {
+    const videos = await videosPromise
+
+    const playlistItems = await youtubeApi.getPlaylistItems(
+      channel.contentDetails.relatedPlaylists.uploads,
+    )
+    const videoIds = playlistItems.map((item) => item.contentDetails.videoId)
+    videos.push(...(await youtubeApi.getVideos(videoIds)))
+    return videos
+  }, Promise.resolve([]))
+
+  return {
+    channels,
+    videos,
+  }
+}
+
+const filterVideos = (
+  videos: Video[],
+  channelDefinitions: ChannelDefinition[],
+  members: Member[],
+) => {
+  const channelDefinitionsDict = makeDict(channelDefinitions, 'channelId')
+  const containsKeyword = (video: Video, keyword: string) => {
+    return video.snippet.title.includes(keyword) || video.snippet.description.includes(keyword)
+  }
+
+  const filteredVideos = videos.filter((video) => {
+    const channelDefinition = channelDefinitionsDict[video.snippet.channelId]
+    if (channelDefinition.isOfficial) {
+      return true
+    }
+
+    if (containsKeyword(video, '日向坂')) {
+      return true
+    }
+    return members.some((member) => containsKeyword(video, member.name))
+  })
+
+  return filteredVideos
+}
+
+const sortByPublishedAtDesc = (a: Video, b: Video) => {
+  if (a.snippet.publishedAt < b.snippet.publishedAt) {
+    return 1
+  } else if (a.snippet.publishedAt > b.snippet.publishedAt) {
+    return -1
+  }
+  return 0
+}
+
+const getUntags = (videos: Video[], tagsDict: Dict<Tags>): Tags[] => {
   const untaggedVideos = videos.filter((video) => {
     return !(video.id in tagsDict)
   })
-  const untags: Tags[] = untaggedVideos.map((untaggedVideo) => {
+  return untaggedVideos.map((untaggedVideo) => {
     return {
       title: untaggedVideo.snippet.title,
       videoId: untaggedVideo.id,
       tags: [],
     }
   })
-  return makeDict(untags, 'videoId')
-}
-
-const apiKey = process.env.GOOGLE_API_KEY
-if (!apiKey) {
-  throw new Error('GOOGLE_API_KEY is not defined in environment variables.')
 }
 
 const main = async () => {
   try {
-    const youtubeApi = new YoutubeApi(apiKey)
+    const youtubeApi = newYoutubeApi()
 
-    console.info(`Loading ${CHANNEL_DEFINITIONS_JSON}`)
-    const channelDefinitions = loadJson<ChannelDefinition[]>(CHANNEL_DEFINITIONS_JSON)
-    const channelDefinitionsDict = makeDict(channelDefinitions, 'channelId')
-    const channelIds = channelDefinitions
-      .filter((channelDefinition) => channelDefinition.isValid)
-      .map((channelDefinition) => channelDefinition.channelId)
+    console.info('Loading files')
+    const { validChannelIds, channelDefinitions, members, tagsDict } = loadFiles()
 
-    console.info(`Loading ${MEMBERS_JSON}`)
-    const members = loadJson<Member[]>(MEMBERS_JSON)
-    const membersDict = makeDict(members, 'name')
-
-    console.info(`Loading ${TAGS_DICT_JSON}`)
-    const tagsDict = loadJson<Dict<Tags>>(TAGS_DICT_JSON)
-
-    console.info('Getting channels information from YoutubeApi')
-    const channels = await youtubeApi.getChannels(channelIds)
-    const channelsDict = makeDict(channels, 'id')
-
-    console.info('Getting videos information from YoutubeApi')
-    const allVideos = await channels.reduce<Promise<Video[]>>(async (videosPromise, channel) => {
-      const videos = await videosPromise
-      const playlistItems = await youtubeApi.getPlaylistItems(
-        channel.contentDetails.relatedPlaylists.uploads,
-      )
-      const videoIds = playlistItems.map((item) => item.contentDetails.videoId)
-      videos.push(...(await youtubeApi.getVideos(videoIds)))
-      return videos
-    }, Promise.resolve([]))
+    console.info('Getting data from YoutubeApi')
+    const { channels, videos } = await getDataFromYoutubeApi(youtubeApi, validChannelIds)
 
     console.info('Filtering videos')
-    const filteredVideos = allVideos.filter((video) => {
-      const channelDefinition = channelDefinitionsDict[video.snippet.channelId]
-      if (channelDefinition.isOfficial) {
-        return true
-      }
-
-      const containsKeyword = (keyword: string) => {
-        return video.snippet.title.includes(keyword) || video.snippet.description.includes(keyword)
-      }
-      if (containsKeyword('日向坂')) {
-        return true
-      }
-      return Object.keys(membersDict).some((key) => {
-        return containsKeyword(key)
-      })
-    })
+    const filteredVideos = filterVideos(videos, channelDefinitions, members)
 
     console.info('Sorting videos')
-    filteredVideos.sort((a, b) => {
-      if (a.snippet.publishedAt < b.snippet.publishedAt) {
-        return 1
-      } else if (a.snippet.publishedAt > b.snippet.publishedAt) {
-        return -1
-      }
-      return 0
+    filteredVideos.sort(sortByPublishedAtDesc)
+
+    console.info('Getting untags')
+    const untags = getUntags(filteredVideos, tagsDict)
+
+    console.info('Saving files')
+    const savingFiles = [
+      {
+        filePath: MEMBERS_DICT_JSON,
+        content: makeDict(members, 'name'),
+      },
+      {
+        filePath: CHANNELS_DICT_JSON,
+        content: makeDict(channels, 'id'),
+      },
+      {
+        filePath: VIDEOS_DICT_JSON,
+        content: makeDict(filteredVideos, 'id'),
+      },
+      {
+        filePath: UNTAGS_DICT_JSON,
+        content: makeDict(untags, 'videoId'),
+      },
+    ]
+    savingFiles.forEach((savingFile) => {
+      saveAsJson(savingFile.filePath, savingFile.content)
     })
-    const filteredVideosDict = makeDict(filteredVideos, 'id')
-
-    console.info('Checking untagged videos')
-    const untagsDict = makeUntagsDict(filteredVideos, tagsDict)
-
-    console.info(`Saving ${CHANNELS_DICT_JSON}`)
-    saveAsJson(CHANNELS_DICT_JSON, channelsDict)
-    console.info(`Saving ${VIDEOS_DICT_JSON}`)
-    saveAsJson(VIDEOS_DICT_JSON, filteredVideosDict)
-    console.info(`Saving ${MEMBERS_DICT_JSON}`)
-    saveAsJson(MEMBERS_DICT_JSON, membersDict)
-    console.info(`Saving ${UNTAGS_DICT_JSON}`)
-    saveAsJson(UNTAGS_DICT_JSON, untagsDict)
   } catch (error) {
     console.error(error)
     throw error
