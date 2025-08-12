@@ -1,22 +1,20 @@
 import fs from 'fs'
-import path from 'path'
-import { fileURLToPath } from 'url'
 
 import type { Video } from '../types/youtube'
 import type { ChannelDefinition, Member, Tags, Dict } from '../types/sakamichi'
 import { YoutubeApi } from './youtubeApi'
 
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = path.dirname(__filename)
+const DIR_PATH = import.meta.dirname + '/'
 // input files
-const CHANNEL_DEFINITIONS_JSON = __dirname + '/data/channel_definitions.json'
-const MEMBERS_JSON = __dirname + '/data/members.json'
-const TAGS_DICT_JSON = __dirname + '/data/tagsDict.json'
+const CHANNEL_DEFINITIONS_JSON = DIR_PATH + 'data/channel_definitions.json'
+const MEMBERS_JSON = DIR_PATH + 'data/members.json'
+const TAGS_DICT_JSON_FOR_LOAD = DIR_PATH + 'data/tagsDict.json'
 // output files
-const MEMBERS_DICT_JSON = __dirname + '/data/membersDict.json'
-const CHANNELS_DICT_JSON = __dirname + '/data/channelsDict.json'
-const VIDEOS_DICT_JSON = __dirname + '/data/videosDict.json'
-const UNTAGS_DICT_JSON = __dirname + '/data/untagsDict.json'
+const MEMBERS_DICT_JSON = DIR_PATH + '../public/membersDict.json'
+const CHANNELS_DICT_JSON = DIR_PATH + '../public/channelsDict.json'
+const VIDEOS_DICT_JSON = DIR_PATH + '../public/videosDict.json'
+const TAGS_DICT_JSON_FOR_SAVE = DIR_PATH + '../public/tagsDict.json'
+const UNTAGS_DICT_JSON = DIR_PATH + 'data/untagsDict.json'
 
 function loadJson<T>(filePath: string): T {
   const fileContent = fs.readFileSync(filePath, 'utf-8')
@@ -50,7 +48,7 @@ const newYoutubeApi = () => {
 const loadFiles = () => {
   const channelDefinitions = loadJson<ChannelDefinition[]>(CHANNEL_DEFINITIONS_JSON)
   const members = loadJson<Member[]>(MEMBERS_JSON)
-  const tagsDict = loadJson<Dict<Tags>>(TAGS_DICT_JSON)
+  const tagsDict = loadJson<Dict<Tags>>(TAGS_DICT_JSON_FOR_LOAD)
 
   const validChannelIds = channelDefinitions
     .filter((channelDefinition) => channelDefinition.isValid)
@@ -163,6 +161,10 @@ const main = async () => {
         content: makeDict(filteredVideos, 'id'),
       },
       {
+        filePath: TAGS_DICT_JSON_FOR_SAVE,
+        content: tagsDict,
+      },
+      {
         filePath: UNTAGS_DICT_JSON,
         content: makeDict(untags, 'videoId'),
       },
@@ -171,7 +173,7 @@ const main = async () => {
       saveAsJson(savingFile.filePath, savingFile.content)
     })
   } catch (error) {
-    console.error(error)
+    // console.error(error)
     throw error
   }
 }

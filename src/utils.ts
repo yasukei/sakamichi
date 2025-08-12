@@ -1,9 +1,9 @@
 import type { Member, Tags, Dict } from '../types/sakamichi.d.ts'
 import type { Channel, Video } from '../types/youtube.d.ts'
-import membersDict from '../scripts/data/membersDict.json'
-import channelsDict from '../scripts/data/channelsDict.json'
-import videosDict from '../scripts/data/videosDict.json'
-import tagsDict from '../scripts/data/tagsDict.json'
+import membersDict from '../public/membersDict.json'
+import channelsDict from '../public/channelsDict.json'
+import videosDict from '../public/videosDict.json'
+import tagsDict from '../public/tagsDict.json'
 
 // TODO: hide from outside
 export const members: Dict<Member> = membersDict

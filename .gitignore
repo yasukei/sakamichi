@@ -33,8 +33,8 @@ test-results/
 playwright-report/
 
 .env
-__pycache__/
-scripts/data/membersDict.json
-scripts/data/channelsDict.json
-scripts/data/videosDict.json
+public/membersDict.json
+public/channelsDict.json
+public/videosDict.json
+public/tagsDict.json
 scripts/data/untagsDict.json
