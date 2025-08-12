@@ -3,7 +3,7 @@ import { getChannelTitles, getXbatchNames } from '@/utils.ts'
 import TagList from '@/components/TagList.vue'
 import { useSelectedTagsStore } from '@/stores/selectedTags.ts'
 
-const { clear } = useSelectedTagsStore()
+const selectedTagsStore = useSelectedTagsStore()
 
 const batches = [
   {
@@ -46,7 +46,9 @@ const others = ['未分類']
 
 <template>
   <div class="">
-    <h2 class="text-center">フィルタ<button class="clear-btn" @click="clear">（解除）</button></h2>
+    <h2 class="text-center">
+      フィルタ<button class="clear-btn" @click="selectedTagsStore.clear">（解除）</button>
+    </h2>
     <ul>
       <li>
         <h3>チャンネル</h3>

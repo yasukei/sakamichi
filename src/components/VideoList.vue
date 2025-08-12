@@ -11,7 +11,7 @@ interface Props {
 }
 const props = defineProps<Props>()
 
-const { selectedTags } = useSelectedTagsStore()
+const selectedTagsStore = useSelectedTagsStore()
 
 function contain(superset: Set<string>, subset: Set<string>): boolean {
   if (subset.size > superset.size) {
@@ -30,7 +30,7 @@ const containSelectedTags = (video: Video) => {
   const tags = getTags(video.id).concat([getChannelTitle(video.snippet.channelId)])
   const tagsSet = new Set<string>(tags)
 
-  return contain(tagsSet, selectedTags)
+  return contain(tagsSet, selectedTagsStore.selectedTags)
 }
 
 const perPage = 10

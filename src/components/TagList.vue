@@ -7,23 +7,23 @@ interface Props {
 }
 const props = defineProps<Props>()
 
-const { selectedTags, selectTag, unselectTag } = useSelectedTagsStore()
+const selectedTagsStore = useSelectedTagsStore()
 
 const onClick = (tag: string) => {
   if (!props.canClick) {
     return
   }
 
-  if (selectedTags.has(tag)) {
-    unselectTag(tag)
+  if (selectedTagsStore.selectedTags.has(tag)) {
+    selectedTagsStore.unselectTag(tag)
   } else {
-    selectTag(tag)
+    selectedTagsStore.selectTag(tag)
   }
 }
 
 const getClass = (tag: string) => {
   let s = 'tag'
-  if (selectedTags.has(tag)) {
+  if (selectedTagsStore.selectedTags.has(tag)) {
     s += ' tag-on'
   } else {
     s += ' tag-off'
