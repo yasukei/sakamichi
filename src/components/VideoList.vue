@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { Video } from '../../types/youtube.d.ts'
-import { getTags, getChannelTitle } from '@/utils'
+import { useJsonDataStore } from '@/stores/jsonData'
 import { useSelectedTagsStore } from '@/stores/selectedTags.ts'
 import VideoListItem from './VideoListItem.vue'
 import InfiniteScroll from './InfiniteScroll.vue'
@@ -11,6 +11,7 @@ interface Props {
 }
 const props = defineProps<Props>()
 
+const jsonDataStore = useJsonDataStore()
 const selectedTagsStore = useSelectedTagsStore()
 
 function contain(superset: Set<string>, subset: Set<string>): boolean {
@@ -27,7 +28,9 @@ function contain(superset: Set<string>, subset: Set<string>): boolean {
 }
 
 const containSelectedTags = (video: Video) => {
-  const tags = getTags(video.id).concat([getChannelTitle(video.snippet.channelId)])
+  const tags = jsonDataStore
+    .getTags(video.id)
+    .concat([jsonDataStore.getChannelTitle(video.snippet.channelId)])
   const tagsSet = new Set<string>(tags)
 
   return contain(tagsSet, selectedTagsStore.selectedTags)

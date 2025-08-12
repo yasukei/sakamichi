@@ -5,29 +5,29 @@ import VideoList from '@/components/VideoList.vue'
 import IconFunnel from '@/components/icons/IconFunnel.vue'
 import IconSpinner from '@/components/icons/IconSpinner.vue'
 import MetaInfo from '@/components/MetaInfo.vue'
-import { useVideosDictStore } from '@/stores/videosDict'
+import { useJsonDataStore } from '@/stores/jsonData'
 import { useSelectedTagsStore } from '@/stores/selectedTags'
 
 const showModal = ref(false)
 const onFunnelClicked = () => {
   showModal.value = !showModal.value
 }
-const videosDictStore = useVideosDictStore()
+const jsonDataStore = useJsonDataStore()
 const selectedTagsStore = useSelectedTagsStore()
 
 onMounted(async () => {
-  await videosDictStore.fetchVideosDict()
+  await jsonDataStore.fetch()
 })
 </script>
 
 <template>
   <div class="">
     <main class="">
-      <p v-if="!videosDictStore.isLoaded" class="p-4 text-center">
+      <p v-if="!jsonDataStore.isLoaded" class="p-4 text-center">
         <IconSpinner class="inline-block" />
         <span class="ml-2">Loading…</span>
       </p>
-      <VideoList v-else :videos="videosDictStore.videos" class="" />
+      <VideoList v-else :videos="jsonDataStore.videos" class="" />
     </main>
 
     <!-- funnel-modal -->

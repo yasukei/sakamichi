@@ -1,14 +1,17 @@
 <script setup lang="ts">
 import type { Video } from '../../types/youtube.d.ts'
-import { channels, getTags, formatDateString } from '@/utils.ts'
+import { formatDateString } from '@/utils.ts'
 import TagList from '@/components/TagList.vue'
+import { useJsonDataStore } from '@/stores/jsonData'
 
 interface Props {
   video: Video
 }
 const props = defineProps<Props>()
 
-const channel = channels[props.video.snippet.channelId]
+const jsonDataStore = useJsonDataStore()
+
+const channel = jsonDataStore.channelsDict[props.video.snippet.channelId]
 const getChannelUrl = () => {
   return 'https://www.youtube.com/channel/' + channel.id
 }
@@ -47,7 +50,7 @@ const getVideoUrl = () => {
     <time class="video-datetime" :datetime="video.snippet.publishedAt">{{
       formatDateString(video.snippet.publishedAt)
     }}</time>
-    <TagList :tags="getTags(video.id)" :canClick="true" />
+    <TagList :tags="jsonDataStore.getTags(video.id)" :canClick="true" />
   </div>
 </template>
 

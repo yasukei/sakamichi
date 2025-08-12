@@ -1,44 +1,45 @@
 <script setup lang="ts">
-import { getChannelTitles, getXbatchNames } from '@/utils.ts'
 import TagList from '@/components/TagList.vue'
+import { useJsonDataStore } from '@/stores/jsonData'
 import { useSelectedTagsStore } from '@/stores/selectedTags.ts'
 
+const jsonDataStore = useJsonDataStore()
 const selectedTagsStore = useSelectedTagsStore()
 
 const batches = [
   {
     title: '2期生',
-    memberNames: getXbatchNames(2, false),
+    memberNames: jsonDataStore.getXbatchNames(2, false),
   },
   {
     title: '3期生',
-    memberNames: getXbatchNames(3, false),
+    memberNames: jsonDataStore.getXbatchNames(3, false),
   },
   {
     title: '4期生',
-    memberNames: getXbatchNames(4, false),
+    memberNames: jsonDataStore.getXbatchNames(4, false),
   },
   {
     title: '5期生',
-    memberNames: getXbatchNames(5, false),
+    memberNames: jsonDataStore.getXbatchNames(5, false),
   },
 ]
 const batchesGraduated = [
   {
     title: '1期生',
-    memberNames: getXbatchNames(1, true),
+    memberNames: jsonDataStore.getXbatchNames(1, true),
   },
   {
     title: '2期生',
-    memberNames: getXbatchNames(2, true),
+    memberNames: jsonDataStore.getXbatchNames(2, true),
   },
   // {
   //   title: '3期生',
-  //   memberNames: getXbatchNames(3, true),
+  //   memberNames: jsonDataStore.getXbatchNames(3, true),
   // },
   {
     title: '4期生',
-    memberNames: getXbatchNames(4, true),
+    memberNames: jsonDataStore.getXbatchNames(4, true),
   },
 ]
 const others = ['未分類']
@@ -52,7 +53,7 @@ const others = ['未分類']
     <ul>
       <li>
         <h3>チャンネル</h3>
-        <TagList :tags="getChannelTitles()" :canClick="true" />
+        <TagList :tags="jsonDataStore.getChannelTitles()" :canClick="true" />
       </li>
       <li>
         <h3>メンバー</h3>
