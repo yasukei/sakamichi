@@ -130,6 +130,7 @@ const main = async () => {
     saveAsJson(UNTAGS_DICT_JSON, untagsDict)
   } catch (error) {
     console.error(error)
+    throw error
   }
 }
 
