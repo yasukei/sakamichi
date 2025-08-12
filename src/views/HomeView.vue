@@ -1,23 +1,33 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import { videos } from '@/utils'
+import { ref, onMounted } from 'vue'
 import TagFilter from '@/components/TagFilter.vue'
 import VideoList from '@/components/VideoList.vue'
 import IconFunnel from '@/components/icons/IconFunnel.vue'
+import IconSpinner from '@/components/icons/IconSpinner.vue'
 import MetaInfo from '@/components/MetaInfo.vue'
+import { useVideosDictStore } from '@/stores/videosDict'
 import { useSelectedTagsStore } from '@/stores/selectedTags'
 
 const showModal = ref(false)
 const onFunnelClicked = () => {
   showModal.value = !showModal.value
 }
-const { selectedTags } = useSelectedTagsStore()
+const videosDictStore = useVideosDictStore()
+const { selectedTags } = useSelectedTagsStore() // TODO: fix bad usage
+
+onMounted(async () => {
+  await videosDictStore.fetchVideosDict()
+})
 </script>
 
 <template>
   <div class="">
     <main class="">
-      <VideoList :videos="Object.values(videos)" class="" />
+      <p v-if="!videosDictStore.isLoaded" class="p-4 text-center">
+        <IconSpinner class="inline-block" />
+        <span class="ml-2">Loading…</span>
+      </p>
+      <VideoList v-else :videos="videosDictStore.videos" class="" />
     </main>
 
     <!-- funnel-modal -->

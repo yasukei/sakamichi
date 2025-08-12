@@ -1,14 +1,12 @@
 import type { Member, Tags, Dict } from '../types/sakamichi.d.ts'
-import type { Channel, Video } from '../types/youtube.d.ts'
+import type { Channel } from '../types/youtube.d.ts'
 import membersDict from '../public/membersDict.json'
 import channelsDict from '../public/channelsDict.json'
-import videosDict from '../public/videosDict.json'
 import tagsDict from '../public/tagsDict.json'
 
 // TODO: hide from outside
 export const members: Dict<Member> = membersDict
 export const channels: Dict<Channel> = channelsDict
-export const videos: Dict<Video> = videosDict
 const tags: Dict<Tags> = tagsDict
 
 export function getXbatchMembers(batch: number, graduated: boolean): Member[] {

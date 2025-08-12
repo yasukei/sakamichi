@@ -34,7 +34,7 @@ const containSelectedTags = (video: Video) => {
 }
 
 const perPage = 10
-const lastItem = ref(perPage)
+const lastItem = ref(perPage) // TODO: fix bad naming. it's not an item
 const videoItems = ref<Video[]>(props.videos.slice(0, lastItem.value))
 
 const fetchItems = (resolve: (hasMoreData: boolean) => void) => {
@@ -64,7 +64,7 @@ const fetchItems = (resolve: (hasMoreData: boolean) => void) => {
       tag="ul"
       class="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5"
     >
-      <template v-for="video in videoItems" :key="video.video_id">
+      <template v-for="video in videoItems" :key="video.id">
         <li v-show="containSelectedTags(video)">
           <VideoListItem :video="video" />
         </li>
