@@ -7,7 +7,11 @@
 }
 
 a {
-  @apply text-primary-color hover:text-primary-hover-color transition delay-75 duration-300;
+  @apply text-primary-color hover:text-primary-hover-color transition delay-75 duration-200;
+}
+
+img {
+  @apply rounded-lg hover:opacity-80 transition delay-75 duration-200;
 }
 
 button {

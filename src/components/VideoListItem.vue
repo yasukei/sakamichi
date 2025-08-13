@@ -30,11 +30,7 @@ const getVideoUrl = () => {
 <template>
   <div>
     <a :href="getVideoUrl()" target="_blank">
-      <img
-        :src="video.snippet.thumbnails.medium.url"
-        :alt="video.snippet.title"
-        class="w-full rounded-lg"
-      />
+      <img :src="video.snippet.thumbnails.medium.url" :alt="video.snippet.title" class="w-full" />
     </a>
     <h2 class="text-lg">
       <a :href="getVideoUrl()" target="_blank">{{ video.snippet.title }}</a>
