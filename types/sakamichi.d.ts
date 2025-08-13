@@ -13,7 +13,7 @@ export interface Member {
 }
 
 export interface Tags {
-  title: string
+  title?: string
   videoId: string
   tags: string[]
 }

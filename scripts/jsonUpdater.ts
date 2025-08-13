@@ -1,6 +1,6 @@
 import fs from 'fs'
 
-import type { Video } from '../types/youtube'
+import type { Channel, Video } from '../types/youtube'
 import type { ChannelDefinition, Member, Tags, Dict } from '../types/sakamichi'
 import { YoutubeApi } from './youtubeApi'
 
@@ -48,6 +48,61 @@ function containsKeyword(video: Video, keyword: string) {
   const description = removeAllWhiteSpace(video.snippet.description)
 
   return title.includes(keyword) || description.includes(keyword)
+}
+
+function getChannelForSave(channel: Channel): Channel {
+  return {
+    id: channel.id,
+    snippet: {
+      title: channel.snippet.title,
+      description: channel.snippet.description,
+      thumbnails: {
+        default: channel.snippet.thumbnails.default,
+      },
+    },
+    contentDetails: {
+      relatedPlaylists: {
+        uploads: channel.contentDetails.relatedPlaylists.uploads,
+      },
+    },
+  }
+}
+
+function getChannelsForSave(channels: Channel[]): Channel[] {
+  return channels.map((channel) => getChannelForSave(channel))
+}
+
+function getVideoForSave(video: Video): Video {
+  return {
+    id: video.id,
+    snippet: {
+      publishedAt: video.snippet.publishedAt,
+      channelId: video.snippet.channelId,
+      title: video.snippet.title,
+      description: video.snippet.description,
+      thumbnails: {
+        medium: video.snippet.thumbnails.medium,
+      },
+    },
+    contentDetails: {
+      duration: video.contentDetails.duration,
+    },
+  }
+}
+
+function getVideosForSave(videos: Video[]): Video[] {
+  return videos.map((video) => getVideoForSave(video))
+}
+
+function getTagsForSave(tags: Tags): Tags {
+  return {
+    videoId: tags.videoId,
+    tags: tags.tags,
+  }
+}
+
+function getTagssForSave(tagss: Tags[]): Tags[] {
+  return tagss.map((tags) => getTagsForSave(tags))
 }
 
 const newYoutubeApi = () => {
@@ -218,15 +273,15 @@ const main = async () => {
       },
       {
         filePath: CHANNELS_DICT_JSON,
-        content: makeDict(channels, 'id'),
+        content: makeDict(getChannelsForSave(channels), 'id'),
       },
       {
         filePath: VIDEOS_DICT_JSON,
-        content: makeDict(hinatazakaVideos, 'id'),
+        content: makeDict(getVideosForSave(hinatazakaVideos), 'id'),
       },
       {
         filePath: TAGS_DICT_JSON_FOR_SAVE,
-        content: tagsDict,
+        content: makeDict(getTagssForSave(Object.values(tagsDict)), 'videoId'),
       },
     ]
     savingFiles.forEach((savingFile) => {

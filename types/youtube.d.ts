@@ -11,8 +11,6 @@ export interface Channel {
     description: string
     thumbnails: {
       default: Thumbnail
-      medium: Thumbnail
-      high: Thumbnail
     }
   }
   contentDetails: {
@@ -52,7 +50,6 @@ export interface Video {
     title: string
     description: string
     thumbnails: {
-      default: Thumbnail
       medium: Thumbnail
     }
   }
