@@ -39,8 +39,15 @@ function makeDict<T>(array: T[], keyMemberName: string): Dict<T> {
   return dict
 }
 
+function removeAllWhiteSpace(text: string) {
+  return text.replace(/\s/g, '')
+}
+
 function containsKeyword(video: Video, keyword: string) {
-  return video.snippet.title.includes(keyword) || video.snippet.description.includes(keyword)
+  const title = removeAllWhiteSpace(video.snippet.title)
+  const description = removeAllWhiteSpace(video.snippet.description)
+
+  return title.includes(keyword) || description.includes(keyword)
 }
 
 const newYoutubeApi = () => {
