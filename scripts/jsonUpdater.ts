@@ -1,7 +1,7 @@
 import fs from 'fs'
 
 import type { Channel, Video } from '../types/youtube'
-import type { ChannelDefinition, Member, Tags, Dict } from '../types/sakamichi'
+import type { ChannelDefinition, Member, VideoTags, Dict } from '../types/sakamichi'
 import { YoutubeApi } from './youtubeApi'
 
 const DIR_PATH = import.meta.dirname + '/'
@@ -94,15 +94,15 @@ function getVideosForSave(videos: Video[]): Video[] {
   return videos.map((video) => getVideoForSave(video))
 }
 
-function getTagsForSave(tags: Tags): Tags {
+function getVideoTagsForSave(videoTags: VideoTags): VideoTags {
   return {
-    videoId: tags.videoId,
-    tags: tags.tags,
+    videoId: videoTags.videoId,
+    tags: videoTags.tags,
   }
 }
 
-function getTagssForSave(tagss: Tags[]): Tags[] {
-  return tagss.map((tags) => getTagsForSave(tags))
+function getVideoTagsArrayForSave(videoTagsArray: VideoTags[]): VideoTags[] {
+  return videoTagsArray.map((tags) => getVideoTagsForSave(tags))
 }
 
 const newYoutubeApi = () => {
@@ -132,7 +132,7 @@ const loadTagsDict = (dirPath: string) => {
     .map((entry) => `${dirPath}/${entry}`)
 
   return tagsDictFilePaths.reduce((accumulator, tagsDictFilePath) => {
-    const jsonContent = loadJson<Dict<Tags>>(tagsDictFilePath)
+    const jsonContent = loadJson<Dict<VideoTags>>(tagsDictFilePath)
     return { ...accumulator, ...jsonContent }
   }, {})
 }
@@ -205,11 +205,11 @@ const sortByPublishedAtDesc = (a: Video, b: Video) => {
   return 0
 }
 
-const filterUntaggedVideos = (videos: Video[], tagsDict: Dict<Tags>) => {
+const filterUntaggedVideos = (videos: Video[], tagsDict: Dict<VideoTags>) => {
   return videos.filter((video) => !(video.id in tagsDict))
 }
 
-const makeDefaultTagsForEachChannel = (videos: Video[], members: Member[]): Dict<Tags[]> => {
+const makeDefaultTagsForEachChannel = (videos: Video[], members: Member[]): Dict<VideoTags[]> => {
   const defaultTagsForEachChannel = videos.reduce((accumulator, video) => {
     const membersInTheVideo = members.filter((member) => containsKeyword(video, member.name))
 
@@ -231,7 +231,7 @@ const makeDefaultTagsForEachChannel = (videos: Video[], members: Member[]): Dict
   return defaultTagsForEachChannel
 }
 
-const saveUntagsDictForEachChannel = (tagsForEachChannel: Dict<Tags[]>) => {
+const saveUntagsDictForEachChannel = (tagsForEachChannel: Dict<VideoTags[]>) => {
   Object.keys(tagsForEachChannel).forEach((channelId) => {
     const filePath = `${UNTAGS_DICT_DIR}/${channelId}${UNTAGS_DICT_SUFFIX}`
     const tags = tagsForEachChannel[channelId]
@@ -281,7 +281,7 @@ const main = async () => {
       },
       {
         filePath: TAGS_DICT_JSON_FOR_SAVE,
-        content: makeDict(getTagssForSave(Object.values(tagsDict)), 'videoId'),
+        content: makeDict(getVideoTagsArrayForSave(Object.values(tagsDict)), 'videoId'),
       },
     ]
     savingFiles.forEach((savingFile) => {

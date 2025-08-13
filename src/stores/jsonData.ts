@@ -2,7 +2,7 @@ import axios from 'axios'
 import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
 
-import type { Dict, Member, Tags } from '../../types/sakamichi'
+import type { Dict, Member, VideoTags } from '../../types/sakamichi'
 import type { Channel, Video } from '../../types/youtube'
 
 export const useJsonDataStore = defineStore('jsonData', () => {
@@ -10,7 +10,7 @@ export const useJsonDataStore = defineStore('jsonData', () => {
   const membersDict = ref<Dict<Member>>({})
   const channelsDict = ref<Dict<Channel>>({})
   const videosDict = ref<Dict<Video>>({}) // TODO: initialize vidoesDict-1.json and so on
-  const tagsDict = ref<Dict<Tags>>({})
+  const tagsDict = ref<Dict<VideoTags>>({})
   const isLoaded = ref(false)
 
   // Getters

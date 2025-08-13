@@ -12,7 +12,7 @@ export interface Member {
   graduated: boolean
 }
 
-export interface Tags {
+export interface VideoTags {
   title?: string
   videoId: string
   tags: string[]
