@@ -36,14 +36,14 @@ const getVideoUrl = () => {
         class="w-full rounded-lg"
       />
     </a>
-    <h2 class="video-title">
+    <h2 class="text-lg">
       <a :href="getVideoUrl()" target="_blank">{{ video.snippet.title }}</a>
     </h2>
     <div class="flex justify-start items-center gap-4">
       <a :href="getChannelUrl()" target="_blank">
         <img :src="channel.snippet.thumbnails.default.url" class="w-10 h-10 object-contain" />
       </a>
-      <a :href="getChannelUrl()" target="_blank" class="channel-title">
+      <a :href="getChannelUrl()" target="_blank" class="text-sm">
         {{ channel.snippet.title }}
       </a>
     </div>
@@ -56,16 +56,4 @@ const getVideoUrl = () => {
 
 <style lang="postcss" scoped>
 @reference "../assets/main.css";
-
-.video-title {
-  @apply text-lg;
-}
-
-.channel-title {
-  @apply text-sm;
-}
-
-.description {
-  @apply bg-slate-100 rounded-md p-2 m-2;
-}
 </style>
