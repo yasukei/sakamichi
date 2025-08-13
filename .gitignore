@@ -37,4 +37,4 @@ public/membersDict.json
 public/channelsDict.json
 public/videosDict.json
 public/tagsDict.json
-scripts/data/untagsDict.json
+scripts/data/tagsDict/*_untagsDict.json
