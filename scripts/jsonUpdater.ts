@@ -5,16 +5,22 @@ import type { ChannelDefinition, Member, Tags, Dict } from '../types/sakamichi'
 import { YoutubeApi } from './youtubeApi'
 
 const DIR_PATH = import.meta.dirname + '/'
+// suffixes
+const TAGS_DICT_SUFFIX = '_tagsDict.json'
+const UNTAGS_DICT_SUFFIX = '_untagsDict.json'
+
+// dir paths
+const TAGS_DICT_DIR_FOR_LOAD = DIR_PATH + 'data/tagsDict/'
+const UNTAGS_DICT_DIR = DIR_PATH + 'data/tagsDict/'
+
 // input files
 const CHANNEL_DEFINITIONS_JSON = DIR_PATH + 'data/channel_definitions.json'
 const MEMBERS_JSON = DIR_PATH + 'data/members.json'
-const TAGS_DICT_JSON_FOR_LOAD = DIR_PATH + 'data/tagsDict.json'
 // output files
 const MEMBERS_DICT_JSON = DIR_PATH + '../public/membersDict.json'
 const CHANNELS_DICT_JSON = DIR_PATH + '../public/channelsDict.json'
 const VIDEOS_DICT_JSON = DIR_PATH + '../public/videosDict.json'
 const TAGS_DICT_JSON_FOR_SAVE = DIR_PATH + '../public/tagsDict.json'
-const UNTAGS_DICT_JSON = DIR_PATH + 'data/untagsDict.json'
 
 function loadJson<T>(filePath: string): T {
   const fileContent = fs.readFileSync(filePath, 'utf-8')
@@ -45,10 +51,34 @@ const newYoutubeApi = () => {
   return new YoutubeApi(apiKey)
 }
 
+const deleteAllUntagsDict = () => {
+  const dirPath = UNTAGS_DICT_DIR
+  const entries = fs.readdirSync(dirPath)
+  const untagsDictFilePaths = entries
+    .filter((entry) => entry.endsWith(UNTAGS_DICT_SUFFIX))
+    .map((entry) => `${dirPath}/${entry}`)
+
+  untagsDictFilePaths.forEach((filePath) => {
+    fs.unlinkSync(filePath)
+  })
+}
+
+const loadTagsDict = (dirPath: string) => {
+  const entries = fs.readdirSync(dirPath)
+  const tagsDictFilePaths = entries
+    .filter((entry) => entry.endsWith(TAGS_DICT_SUFFIX))
+    .map((entry) => `${dirPath}/${entry}`)
+
+  return tagsDictFilePaths.reduce((accumulator, tagsDictFilePath) => {
+    const jsonContent = loadJson<Dict<Tags>>(tagsDictFilePath)
+    return { ...accumulator, ...jsonContent }
+  }, {})
+}
+
 const loadFiles = () => {
   const channelDefinitions = loadJson<ChannelDefinition[]>(CHANNEL_DEFINITIONS_JSON)
   const members = loadJson<Member[]>(MEMBERS_JSON)
-  const tagsDict = loadJson<Dict<Tags>>(TAGS_DICT_JSON_FOR_LOAD)
+  const tagsDict = loadTagsDict(TAGS_DICT_DIR_FOR_LOAD)
 
   const validChannelIds = channelDefinitions
     .filter((channelDefinition) => channelDefinition.isValid)
@@ -82,14 +112,14 @@ const getDataFromYoutubeApi = async (youtubeApi: YoutubeApi, validChannelIds: st
   }
 }
 
-const filterVideos = (
+const filterHinatazakaVideos = (
   videos: Video[],
   channelDefinitions: ChannelDefinition[],
   members: Member[],
 ) => {
   const channelDefinitionsDict = makeDict(channelDefinitions, 'channelId')
 
-  const filteredVideos = videos.filter((video) => {
+  const hinatazakaVideos = videos.filter((video) => {
     const channelDefinition = channelDefinitionsDict[video.snippet.channelId]
     if (channelDefinition.isOfficial) {
       return true
@@ -101,7 +131,7 @@ const filterVideos = (
     return members.some((member) => containsKeyword(video, member.name))
   })
 
-  return filteredVideos
+  return hinatazakaVideos
 }
 
 const sortByPublishedAtDesc = (a: Video, b: Video) => {
@@ -113,17 +143,38 @@ const sortByPublishedAtDesc = (a: Video, b: Video) => {
   return 0
 }
 
-const getUntags = (videos: Video[], tagsDict: Dict<Tags>, members: Member[]): Tags[] => {
-  const untaggedVideos = videos.filter((video) => {
-    return !(video.id in tagsDict)
-  })
-  return untaggedVideos.map((untaggedVideo) => {
-    const containedMembers = members.filter((member) => containsKeyword(untaggedVideo, member.name))
-    return {
-      title: untaggedVideo.snippet.title,
-      videoId: untaggedVideo.id,
-      tags: containedMembers.map((member) => member.name),
+const filterUntaggedVideos = (videos: Video[], tagsDict: Dict<Tags>) => {
+  return videos.filter((video) => !(video.id in tagsDict))
+}
+
+const makeDefaultTagsForEachChannel = (videos: Video[], members: Member[]): Dict<Tags[]> => {
+  const defaultTagsForEachChannel = videos.reduce((accumulator, video) => {
+    const membersInTheVideo = members.filter((member) => containsKeyword(video, member.name))
+
+    const defaultTags = {
+      title: video.snippet.title,
+      videoId: video.id,
+      tags: membersInTheVideo.map((member) => member.name),
     }
+
+    const channelId = video.snippet.channelId
+    if (!(channelId in accumulator)) {
+      accumulator[channelId] = []
+    }
+    accumulator[channelId].push(defaultTags)
+
+    return accumulator
+  }, {})
+
+  return defaultTagsForEachChannel
+}
+
+const saveUntagsDictForEachChannel = (tagsForEachChannel: Dict<Tags[]>) => {
+  Object.keys(tagsForEachChannel).forEach((channelId) => {
+    const filePath = `${UNTAGS_DICT_DIR}/${channelId}${UNTAGS_DICT_SUFFIX}`
+    const tags = tagsForEachChannel[channelId]
+
+    saveAsJson(filePath, makeDict(tags, 'videoId'))
   })
 }
 
@@ -131,20 +182,26 @@ const main = async () => {
   try {
     const youtubeApi = newYoutubeApi()
 
+    console.info(`Deleting existing *${UNTAGS_DICT_SUFFIX}`)
+    deleteAllUntagsDict()
+
     console.info('Loading files')
     const { validChannelIds, channelDefinitions, members, tagsDict } = loadFiles()
 
     console.info('Getting data from YoutubeApi')
     const { channels, videos } = await getDataFromYoutubeApi(youtubeApi, validChannelIds)
 
-    console.info('Filtering videos')
-    const filteredVideos = filterVideos(videos, channelDefinitions, members)
+    console.info('Filtering Hinatazaka videos')
+    const hinatazakaVideos = filterHinatazakaVideos(videos, channelDefinitions, members)
 
     console.info('Sorting videos')
-    filteredVideos.sort(sortByPublishedAtDesc)
+    hinatazakaVideos.sort(sortByPublishedAtDesc)
 
-    console.info('Getting untags')
-    const untags = getUntags(filteredVideos, tagsDict, members)
+    console.info('Filtering untagged vidoes')
+    const untaggedVideos = filterUntaggedVideos(hinatazakaVideos, tagsDict)
+
+    console.info('Making default tags for untagged vidoes for each channel')
+    const defaultTagsForEachChannel = makeDefaultTagsForEachChannel(untaggedVideos, members)
 
     console.info('Saving files')
     const savingFiles = [
@@ -158,20 +215,17 @@ const main = async () => {
       },
       {
         filePath: VIDEOS_DICT_JSON,
-        content: makeDict(filteredVideos, 'id'),
+        content: makeDict(hinatazakaVideos, 'id'),
       },
       {
         filePath: TAGS_DICT_JSON_FOR_SAVE,
         content: tagsDict,
       },
-      {
-        filePath: UNTAGS_DICT_JSON,
-        content: makeDict(untags, 'videoId'),
-      },
     ]
     savingFiles.forEach((savingFile) => {
       saveAsJson(savingFile.filePath, savingFile.content)
     })
+    saveUntagsDictForEachChannel(defaultTagsForEachChannel)
   } catch (error) {
     // console.error(error)
     throw error
