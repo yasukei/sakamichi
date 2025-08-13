@@ -4,7 +4,6 @@ import TagFilter from '@/components/TagFilter.vue'
 import VideoList from '@/components/VideoList.vue'
 import IconFunnel from '@/components/icons/IconFunnel.vue'
 import IconSpinner from '@/components/icons/IconSpinner.vue'
-import MetaInfo from '@/components/MetaInfo.vue'
 import { useJsonDataStore } from '@/stores/jsonData'
 import { useSelectedTagsStore } from '@/stores/selectedTags'
 
@@ -49,7 +48,7 @@ onMounted(async () => {
       </button>
     </div>
 
-    <MetaInfo title="Home" />
+    <!-- <MetaInfo title="Home" /> -->
   </div>
 </template>
 
