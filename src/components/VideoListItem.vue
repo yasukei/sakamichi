@@ -32,21 +32,27 @@ const getVideoUrl = () => {
     <a :href="getVideoUrl()" target="_blank">
       <img :src="video.snippet.thumbnails.medium.url" :alt="video.snippet.title" class="w-full" />
     </a>
-    <h2 class="text-lg">
-      <a :href="getVideoUrl()" target="_blank">{{ video.snippet.title }}</a>
-    </h2>
-    <div class="flex justify-start items-center gap-4">
-      <a :href="getChannelUrl()" target="_blank">
-        <img :src="channel.snippet.thumbnails.default.url" class="w-10 h-10 object-contain" />
+    <div class="flex gap-2 items-center mt-2">
+      <a :href="getChannelUrl()" target="_blank" class="shrink-0">
+        <img
+          :src="channel.snippet.thumbnails.default.url"
+          :alt="channel.snippet.title"
+          class="w-10 h-10 object-contain"
+        />
       </a>
-      <a :href="getChannelUrl()" target="_blank" class="text-sm">
-        {{ channel.snippet.title }}
-      </a>
+      <div>
+        <h2 class="text-md line-clamp-3">
+          <a :href="getVideoUrl()" target="_blank">{{ video.snippet.title }}</a>
+        </h2>
+        <time class="video-datetime" :datetime="video.snippet.publishedAt">{{
+          formatDateString(video.snippet.publishedAt)
+        }}</time>
+      </div>
     </div>
-    <time class="video-datetime" :datetime="video.snippet.publishedAt">{{
-      formatDateString(video.snippet.publishedAt)
-    }}</time>
-    <TagList :tags="jsonDataStore.getTags(video.id)" :canClick="true" />
+    <TagList
+      :tags="[channel.snippet.title].concat(jsonDataStore.getTags(video.id))"
+      :canClick="true"
+    />
   </div>
 </template>
 
