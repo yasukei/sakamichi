@@ -54,7 +54,7 @@ export interface Video {
     }
   }
   contentDetails: {
-    duration: string
+    duration?: string // It becomes undefined when the video is scheduled to be published
   }
 }
 

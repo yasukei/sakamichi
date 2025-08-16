@@ -18,7 +18,7 @@ const getChannelUrl = () => {
 const getVideoUrl = () => {
   const isShorts =
     props.video.snippet.title.toLowerCase().indexOf('shorts') >= 0 ||
-    props.video.contentDetails.duration.indexOf('M') == -1
+    props.video.contentDetails.duration?.indexOf('M') === -1
 
   if (isShorts) {
     return 'https://www.youtube.com/shorts/' + props.video.id
