@@ -26,6 +26,10 @@ const batches = [
 ]
 const batchesGraduated = [
   {
+    title: 'けやき坂46',
+    memberNames: jsonDataStore.getXbatchNames(0, true),
+  },
+  {
     title: '1期生',
     memberNames: jsonDataStore.getXbatchNames(1, true),
   },

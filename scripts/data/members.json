@@ -1,4 +1,6 @@
 [
+  { "name": "長濱ねる", "batch": 0, "order": 1, "graduated": true },
+
   { "name": "井口眞緒", "batch": 1, "order": 1, "graduated": true },
   { "name": "潮紗理菜", "batch": 1, "order": 2, "graduated": true },
   { "name": "柿崎芽実", "batch": 1, "order": 3, "graduated": true },
