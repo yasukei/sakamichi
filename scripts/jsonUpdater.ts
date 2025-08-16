@@ -2,7 +2,7 @@ import fs from 'fs'
 
 import { program } from 'commander'
 
-import type { Channel, Video } from '../types/youtube'
+import type { Channel, PlayListItem, Video } from '../types/youtube'
 import type { ChannelDefinition, Member, VideoTags, Dict } from '../types/sakamichi'
 import { YoutubeApi } from './youtubeApi'
 
@@ -10,10 +10,12 @@ const DIR_PATH = import.meta.dirname + '/'
 // suffixes
 const TAGS_DICT_SUFFIX = '_tagsDict.json'
 const UNTAGS_DICT_SUFFIX = '_untagsDict.json'
+const VIDEOS_SUFFIX = '_videos.json'
 
 // dir paths
 const TAGS_DICT_DIR_FOR_LOAD = DIR_PATH + 'data/tagsDict/'
 const UNTAGS_DICT_DIR = DIR_PATH + 'data/tagsDict/'
+const VIDEOS_DICT_DIR = DIR_PATH + 'data/videos/'
 
 // input files
 const CHANNEL_DEFINITIONS_JSON = DIR_PATH + 'data/channel_definitions.json'
@@ -162,17 +164,44 @@ const loadFiles = () => {
 }
 
 const getDataFromYoutubeApi = async (youtubeApi: YoutubeApi, validChannelIds: string[]) => {
+  const loadVideosFromLocal = (filePath: string): Video[] => {
+    if (fs.existsSync(filePath)) {
+      return loadJson(filePath)
+    }
+    return []
+  }
+  const saveVideosToLocal = (filePath: string, videos: Video[]) => {
+    saveAsJson(filePath, videos)
+  }
   const channels = await youtubeApi.getChannels(validChannelIds)
 
-  const videos = await channels.reduce<Promise<Video[]>>(async (videosPromise, channel) => {
-    const videos = await videosPromise
+  const videos = await channels.reduce<Promise<Video[]>>(async (accumulator, channel) => {
+    const filePath = `${VIDEOS_DICT_DIR}/${channel.id}${VIDEOS_SUFFIX}`
+    const videosInLocalFile = loadVideosFromLocal(filePath)
+    const cache = makeDict(videosInLocalFile, 'id')
 
+    const playListItemValidator = (playlistItems: PlayListItem[]) => {
+      const itemsToBeAdded = playlistItems.filter((playlistItem) => {
+        return !(playlistItem.contentDetails.videoId in cache)
+      })
+      return {
+        itemsToBeAdded: itemsToBeAdded,
+        continueToGet: itemsToBeAdded.length > 0,
+      }
+    }
     const playlistItems = await youtubeApi.getPlaylistItems(
       channel.contentDetails.relatedPlaylists.uploads,
+      playListItemValidator,
     )
     const videoIds = playlistItems.map((item) => item.contentDetails.videoId)
-    videos.push(...(await youtubeApi.getVideos(videoIds)))
-    return videos
+    const videosFromYoutube = await youtubeApi.getVideos(videoIds)
+
+    const videosInThisChannel = [...videosFromYoutube, ...videosInLocalFile]
+    saveVideosToLocal(filePath, videosInThisChannel)
+
+    const videosInAllChannels = await accumulator
+    videosInAllChannels.push(...videosInThisChannel)
+    return videosInAllChannels
   }, Promise.resolve([]))
 
   return {

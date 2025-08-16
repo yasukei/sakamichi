@@ -9,6 +9,12 @@ import {
   VideosResponse,
 } from '../types/youtube'
 
+export interface PlayListItemValidatorResponse {
+  itemsToBeAdded: PlayListItem[]
+  continueToGet: boolean
+}
+export type PlayListItemValidator = (playListItems: PlayListItem[]) => PlayListItemValidatorResponse
+
 export class YoutubeApi {
   private apiKey: string
 
@@ -39,9 +45,19 @@ export class YoutubeApi {
     return channels
   }
 
-  async getPlaylistItems(playlistId: string): Promise<PlayListItem[]> {
+  async getPlaylistItems(
+    playlistId: string,
+    playListItemValidator?: PlayListItemValidator,
+  ): Promise<PlayListItem[]> {
     const url = 'https://www.googleapis.com/youtube/v3/playlistItems'
     const maxResults = 50
+    const defaultValidator = (playListItems: PlayListItem[]) => {
+      return {
+        itemsToBeAdded: playListItems,
+        continueToGet: true,
+      }
+    }
+    const validator = playListItemValidator ?? defaultValidator
     const playlistItems: PlayListItem[] = []
     let nextPageToken: string | undefined = undefined
 
@@ -55,7 +71,11 @@ export class YoutubeApi {
           pageToken: nextPageToken,
         },
       })
-      playlistItems.push(...response.data.items)
+      const { itemsToBeAdded, continueToGet } = validator(response.data.items)
+      playlistItems.push(...itemsToBeAdded)
+      if (!continueToGet) {
+        break
+      }
       nextPageToken = response.data.nextPageToken
     } while (nextPageToken)
 
