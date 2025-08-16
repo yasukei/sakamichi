@@ -1,5 +1,7 @@
 import fs from 'fs'
 
+import { program } from 'commander'
+
 import type { Channel, Video } from '../types/youtube'
 import type { ChannelDefinition, Member, VideoTags, Dict } from '../types/sakamichi'
 import { YoutubeApi } from './youtubeApi'
@@ -25,6 +27,11 @@ const TAGS_DICT_JSON_FOR_SAVE = DIR_PATH + '../public/tagsDict.json'
 function loadJson<T>(filePath: string): T {
   const fileContent = fs.readFileSync(filePath, 'utf-8')
   return JSON.parse(fileContent)
+}
+
+function loadOnlyValuesFromDictJsonFile<T>(filePath: string): T[] {
+  const content: Dict<T> = loadJson(filePath)
+  return Object.values(content)
 }
 
 function saveAsJson<T>(filePath: string, content: T) {
@@ -242,6 +249,9 @@ const saveUntagsDictForEachChannel = (tagsForEachChannel: Dict<VideoTags[]>) => 
 
 const main = async () => {
   try {
+    program.option('-s, --skipGettingYoutubeData').parse()
+    const options = program.opts()
+
     const youtubeApi = newYoutubeApi()
 
     console.info(`Deleting existing *${UNTAGS_DICT_SUFFIX}`)
@@ -250,8 +260,17 @@ const main = async () => {
     console.info('Loading files')
     const { validChannelIds, channelDefinitions, members, tagsDict } = loadFiles()
 
-    console.info('Getting data from YoutubeApi')
-    const { channels, videos } = await getDataFromYoutubeApi(youtubeApi, validChannelIds)
+    const fromFiles = () => {
+      console.info('Getting channels and videos data from files')
+      const videos: Video[] = loadOnlyValuesFromDictJsonFile(VIDEOS_DICT_JSON)
+      const channels: Channel[] = loadOnlyValuesFromDictJsonFile(CHANNELS_DICT_JSON)
+      return { channels, videos }
+    }
+    const fromYoutubeApi = async () => {
+      console.info('Getting channels and videos data from YoutubeApi')
+      return getDataFromYoutubeApi(youtubeApi, validChannelIds)
+    }
+    const { channels, videos } = options.skipYoutubeData ? fromFiles() : await fromYoutubeApi()
 
     console.info('Filtering Hinatazaka videos')
     const hinatazakaVideos = filterHinatazakaVideos(videos, channelDefinitions, members)
