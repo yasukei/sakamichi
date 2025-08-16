@@ -85,6 +85,7 @@
     - oricon, UCbZvkG2uAgr6Oiva4FytscQ
     - モデルプレス | modelpress, UC1Vo3GM-NOGFVwsidmkYVwg
     - ぴあ編集部, UCpyeaj060Bh9B3fM28EqfLw
+    - TVLIFE, UChhzfM8_vJOeea3_KQf2iMg
     - ジェイタメ, UCi_UXwBbB9bVWu00X5xyXVA
   - 音楽
     - 音楽ナタリー, UCAG8dN1Azro6xNhc3NbMtmg
