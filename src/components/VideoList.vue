@@ -36,7 +36,7 @@ const containSelectedTags = (video: Video) => {
   return contain(tagsSet, selectedTagsStore.selectedTags)
 }
 
-const perPage = 10
+const perPage = 20
 const lastItemIndex = ref(perPage)
 const videoItems = ref<Video[]>(props.videos.slice(0, lastItemIndex.value))
 
