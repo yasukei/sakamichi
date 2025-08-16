@@ -1,0 +1,162 @@
+# メモ
+
+- オフィシャルチャンネル
+  - 日向坂46 OFFICIAL YouTube CHANNEL, UCR0V48DJyWbwEAdxLL5FjxA
+  - 日向坂ちゃんねる, UCOB24f8lQBCnVqPZXOkVpOg
+  - 【公式】 ひなこいYouTubeチャンネル, UC4IONb6pMWed0F7BC6niliQ
+- テレビ局
+  - 北海道
+  - 東北
+  - 関東
+    - 東京
+      - NHK
+        - NHK, UCip8ve30-AoX2y2OtAAmqFA
+        - NHK MUSIC, UC8T8_deSUS97DWZeKO_TL9Q
+      - 日本テレビ
+        - 日テレ公式チャンネル, UCkLqBWFde2ZJZfqojgpDqyA
+        - 日テレNEWS, UCuTAXTexrhetbOe3zgskJBQ
+      - テレビ朝日
+        - ANNnewsCH, UCGCZAYq5Xxojl_tSXcVJhiQ
+        - 動画、はじめてみました【テレビ朝日公式】, UCkGCQ4TN-8gvb8QCYIqygHw
+        - テレビ朝日スポーツ【公式】, UCI-w8qGuG4PlmZ25m9x_Q_A
+      - TBS
+        - TBS公式 YouTuboo, UCxpIo6FFB7gMQz2Fy2X8XdQ
+        - TBS NEWS DIG Powered by JNN, UC6AG81pAkf6Lbi_1VC5NmPA
+      - テレビ東京
+        - テレ東公式 TV TOKYO, UCrDj5t8Q9ZFSGft7a3PWl9g
+        - テレ東BIZ, UCkKVQ_GNjd8FbAuT6xDcWgg
+      - フジテレビ
+        - フジテレビ公式, UC7_mFzmj89tqAqgpl5695QQ
+        - フジテレビドキュメンタリー, UCvF8OEpJPsM-JWhTWzvX3fw
+        - フジテレビ SPORTSすぽると!, UCayz9\_-aTstZRoeeZxiPf6g
+        - FOD, UCMtruUtbqGaUYouJk-M4mfQ
+    - 神奈川
+      - テレビ神奈川
+        - テレビ神奈川 tvk3ch, UCtDEkfJlNHq_ONjQnsX5YeA
+  - 中部
+    - 愛知
+      - テレビ愛知
+        - 【公式】テレビ愛知 TV Aichi, UCaMuCIUszPKEx8966ZCVfGw
+      - 中京テレビ
+        - 中京テレビ 公式チャンネル, UCztK-7QCpN1VmQblQ0eqtKQ
+        - 中京テレビNEWS, UCxiRdfyH0FtFCRZTRfRsdsA
+  - 近畿
+  - 中国
+    - テレビ新広島
+      - 広島ニュースTSS, UC7_jFLwpm5apDF-v-pXZb4w
+      - TSSオンデマンド, UCouV316ueTMMIlXvzKoe6kA
+      - 【球団認定】カープ全力応援チャンネル TSS, UCGtlcql20e1g3iCn6LrWLug
+  - 四国
+  - 九州
+  - その他
+    - ABEMA
+      - ABEMA【アベマ】公式, UCLsdm7nCJCVTWSid7G_f0Pg
+      - ABEMA Prime #アベプラ【公式】, UCB1dgsqLiEp57oDAyNV_vww
+      - ABEMA バラエティ【公式】, UC9OvLVXb-okaVtoK9V8Biwg
+      - ABEMAニュース【公式】, UCk5a240pQsTVT9CWPnTyIJw
+      - ABEMA ドラマ【公式】, UCqqGoWAZPC0D9HgZnnngb6g
+      - ABEMA 恋愛【公式】, UCfgQFWzaw7HfaKN-uVIf73Q
+      - ABEMA アニメ&声優【公式】, UCpR3X7_RKNjTTUV51CxURGQ
+      - ABEMAプロレス【公式】, UCKH2n6FJVYR9endOVXw2ydg
+      - ABEMA 格闘【公式】, UClPKS7S62cwYYaq6udr-G-Q
+      -
+- テレビ番組
+  - 有吉ぃぃeeeee！【公式】, UCDqvZvUgRq5RRmy_zZd5Yaw
+  - 【公式】オードリーのNFL倶楽部, UC5bKp_ooXFHvP69gOLk0Pxw
+  - カンニング竹山のイチバン研究所【公式】, UCahRezMHsbBWG_4yRnNQhbA
+  - ABEMA チャンスの時間 【公式】, UC29qkYL1bp4aJDtGra8ZMuQ
+- ラジオ局
+  - 北海道
+  - 東北
+  - 関東
+  - 中部
+  - 近畿
+  - 中国
+  - 四国
+  - 九州
+  - その他
+    - ニッポン放送
+      - ニッポン放送TV【公式】, UCTLUf5otEetTThajFlHG_iQ
+      - ニッポン放送PODCAST STATION, UCYAyn8wOO_JIsIDtnnqgvGw
+      - オールナイトニッポン公式チャンネル, UCSPqD90W9-Usnpspk0-W8rQ
+- テレビ局以外のニュースメディア
+  - エンタメ
+    - ザテレビジョン, UCnittT9IvOYhrIgpsaeeClg
+    - oricon, UCbZvkG2uAgr6Oiva4FytscQ
+    - モデルプレス | modelpress, UC1Vo3GM-NOGFVwsidmkYVwg
+    - ぴあ編集部, UCpyeaj060Bh9B3fM28EqfLw
+    - ジェイタメ, UCi_UXwBbB9bVWu00X5xyXVA
+  - 音楽
+    - 音楽ナタリー, UCAG8dN1Azro6xNhc3NbMtmg
+  - 映画
+    - シネマトゥデイ, UCRxDTCmIjgli-Xgh2KPE9dA
+    - 【公式】キネマ旬報, UCB3WcQCmf6OnF6YHctpe-NA
+    - MOVIE WALKER PRESS, UC0fqx1hgXs3zQLqoA4vBwCA
+- 雑誌
+  - ファッション誌
+    - ViVi channel, UCphXm7TyJKC1IQWrSed8C2w
+    - sweet channel, UC4rgSFUaqlC54h-1Gkvm1rA
+    - bis Channel, UC03MdgLiv5djOqUsv9QwEGw
+    - Seventeen／セブンティーン, UCRILJB5Cy5Qd33h_f61f1Vg
+    - non-no, UCkhP9BdY7DepF69ywZZ9JMw
+    - CanCam, UCibcCKODsjYLMYjKVs145Cg
+    - Ray TV, UCgPn6By2enuKrrwRpczU5cA
+    - ar channel(アールチャンネル), UCjQL5O3wfFTdq34K9gAj2tA
+    - BAILA, UC6jzAiPKIbLnT0BDts-mIlA
+    - バイラ チャンネル, UC-hQsIrkum6AtKXyC_n9d4Q
+    - JJ official, UC3dH_0X6Uwu5Yy3tZLEm_aQ
+    - MEN'S NON-NO　メンズノンノ【公式】, UC0sKRWLg-w8bpP7knY8-Bmw
+  - 女性誌
+    - anan, UCMrS-kcGfsEIBltFeu-6Bbg
+    - with, UC4DPIiALcbRu6yXxQTkW98g
+  - 美容誌
+    - VOCEchannel, UCZ9qH9bedbEp7IDhlbNJfRw
+  - グラビア誌
+    - B.L.T.official, UCZg7Xo4Ir4bB7Qdo7tXCHqg
+    - BOMB IDOL CHANNEL【ボム編集部公式】, UCP2UCMaBCnFkrhQyUwI1xww
+    - FLASHスペシャル, UC6ls6suipQM6a04EG9DA5Gg
+  - 週刊誌
+    - 文春チャンネル【公式】, UCJPEq-fDPYkJw_PHTv_zuiA
+    - デイリー新潮, UCKh1J1QmTFjWXKq6fETir1A
+  - 映像関係
+    - COMMERCIALPHOTO, UCHSpxKopVdD96eCAsV_ITGg
+  - 出版社
+    - 講談社
+      - FRIDAYデジタル, UCoeW5P3tygC3kZayFkLUlzQ
+      - マガジンチャンネル, UCmH9SgzzvDlxG6mpcYg2jJw
+      - 講談社ヤンマガch, UC8dwPSQ5DOJGtwhmcNhNjSw
+    - 集英社
+      - 週プレChannel【集英社 週刊プレイボーイ公式】, UCG9QGvMg993m9lCd-ZjtGPw
+      - ジャンプチャンネル, UC47AYUs8AVU1QsT5LhpXjaw
+      - ヤンジャンTV【集英社ヤングジャンプ公式】, UCU_fSrQkYzBBe9jtep0EIIg
+    - 小学館
+      - NEWSポストセブン【動画公式】, UC-DmGAqCEZMypBwgMncP1tQ
+      - 週刊少年サンデーTV, UCGIG9CIkPxfLXiC84-DNx_Q
+      - スピリッツTube, UCoawlkQPX0Tgp\_-p7BG6SvA
+    - 角川書店
+      - KADOKAWAanime, UCY5fcqgSrQItPAX_Z5Frmwg
+    - 双葉社
+      - グラビアチャンネル【双葉社公式】, UCjuPSpE5Fx-gyRdSDNtlSSQ
+    - 秋田書店
+      - ヤンチャングラビアch【公式】, UCZFVyAraKVQHiC1SL4SPPIQ
+- 新聞社
+- 動画配信サービス
+  - Lemino, UCFLpS7vAGxlNgL0ZorC8oUw
+  - Hulu Japan公式, UCh9VLvvUq_OrBVVd5C7q0Qw
+  - U-NEXT, UCGF2wrIRRO7nVJjB5kJHEPQ
+  - Netflix Japan, UCv2ejD5B1xOYtGB2cf80B8g
+  - DMM TV公式, UCT4TwZQE6biCATLwQ-kIrFg
+  - DMM TV ドラマ【公式】, UCbir5Vdh1ucVd1XpWQP1EjA
+  - ディズニープラス, UCm9iPGnmMYtZkNQ3IoBIPIA
+  - DAZN Japan, UCoFLB_Gw_AoxUuuzKjXrc_Q
+  - TVer official, UC31lc2zUnhefFwUiO5zJLOQ
+- ゲーム会社
+  - CapcomChannel, UCyuEAZQzRqhcaLZvQd9ZUNA
+- 映画会社
+  - 東宝MOVIEチャンネル, UCTDMT3aL30noTVFgNPA9XtQ
+  - 松竹チャンネル/SHOCHIKUch, UCulneJtjMARpEHhWQTlGa6w
+- コンビニ
+  - ローソン（LAWSON), UChuil8HDEej0Y-X4dk1yp0Q
+  - セブン‐イレブン・ジャパン 公式チャンネル, UCyJzyAQtgeBIdy7eobMmZgw
+  - familymart, UCIM0gsswfd7q-AdDW5bVfyA
+-
