@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { Video } from '../../types/youtube.d.ts'
-import { formatDateString } from '@/utils.ts'
+import { formatDateString, formatTimeString } from '@/utils.ts'
 import TagList from '@/components/TagList.vue'
 import { useJsonDataStore } from '@/stores/jsonData'
 
@@ -25,12 +25,23 @@ const getVideoUrl = () => {
   }
   return 'https://www.youtube.com/watch?v=' + props.video.id
 }
+const getDurationString = () => {
+  if (props.video.contentDetails.duration) {
+    return formatTimeString(props.video.contentDetails.duration)
+  }
+  return '--:--'
+}
 </script>
 
 <template>
   <div>
     <a :href="getVideoUrl()" target="_blank">
-      <img :src="video.snippet.thumbnails.medium.url" :alt="video.snippet.title" class="w-full" />
+      <div class="relative">
+        <img :src="video.snippet.thumbnails.medium.url" :alt="video.snippet.title" class="w-full" />
+        <div class="absolute bottom-1 right-1 p-0.25 bg-black opacity-90 text-white text-sm">
+          <p>{{ getDurationString() }}</p>
+        </div>
+      </div>
     </a>
     <div class="flex gap-2 items-center mt-2">
       <a :href="getChannelUrl()" target="_blank" class="shrink-0">
