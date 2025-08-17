@@ -11,11 +11,13 @@ const DIR_PATH = import.meta.dirname + '/'
 const TAGS_DICT_SUFFIX = '_tagsDict.json'
 const UNTAGS_DICT_SUFFIX = '_untagsDict.json'
 const VIDEOS_SUFFIX = '_videos.json'
+const EXCLUDE_VIDEO_IDS_SUFFIX = '_excludeVideoIds.json'
 
 // dir paths
 const TAGS_DICT_DIR_FOR_LOAD = DIR_PATH + 'data/tagsDict/'
 const UNTAGS_DICT_DIR = DIR_PATH + 'data/tagsDict/'
 const VIDEOS_DICT_DIR = DIR_PATH + 'data/videos/'
+const EXCLUDE_VIDEO_IDS_DIR = DIR_PATH + 'data/videos/'
 
 // input files
 const CHANNEL_DEFINITIONS_JSON = DIR_PATH + 'data/channel_definitions.json'
@@ -173,6 +175,15 @@ const getDataFromYoutubeApi = async (youtubeApi: YoutubeApi, validChannelIds: st
   const saveVideosToLocal = (filePath: string, videos: Video[]) => {
     saveAsJson(filePath, videos)
   }
+  const loadExcludeVideoIdsSet = (channelId: string): Set<string> => {
+    const filePath = `${EXCLUDE_VIDEO_IDS_DIR}/${channelId}${EXCLUDE_VIDEO_IDS_SUFFIX}`
+    if (fs.existsSync(filePath)) {
+      const videoIds: string[] = loadJson(filePath)
+      return new Set(videoIds)
+    }
+    return new Set()
+  }
+
   const channels = await youtubeApi.getChannels(validChannelIds)
 
   const videos = await channels.reduce<Promise<Video[]>>(async (accumulator, channel) => {
@@ -199,8 +210,13 @@ const getDataFromYoutubeApi = async (youtubeApi: YoutubeApi, validChannelIds: st
     const videosInThisChannel = [...videosFromYoutube, ...videosInLocalFile]
     saveVideosToLocal(filePath, videosInThisChannel)
 
+    const excludeVideoIdsSet = loadExcludeVideoIdsSet(channel.id)
+    const videosWithoutExcludeVideoIds = videosInThisChannel.filter(
+      (video) => !excludeVideoIdsSet.has(video.id),
+    )
+
     const videosInAllChannels = await accumulator
-    videosInAllChannels.push(...videosInThisChannel)
+    videosInAllChannels.push(...videosWithoutExcludeVideoIds)
     return videosInAllChannels
   }, Promise.resolve([]))
 
