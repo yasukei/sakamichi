@@ -36,6 +36,7 @@ const getDurationString = () => {
 <template>
   <div>
     <a :href="getVideoUrl()" target="_blank">
+      <!-- video's thumbnail -->
       <div class="relative">
         <img :src="video.snippet.thumbnails.medium.url" :alt="video.snippet.title" class="w-full" />
         <div
@@ -46,13 +47,21 @@ const getDurationString = () => {
       </div>
     </a>
     <div class="flex gap-2 items-center mt-2">
-      <a :href="getChannelUrl()" target="_blank" class="shrink-0">
-        <img
-          :src="channel.snippet.thumbnails.default.url"
-          :alt="channel.snippet.title"
-          class="w-10 h-10 object-contain"
-        />
-      </a>
+      <!-- channel's thumbnail -->
+      <div class="relative group w-10 h-10 shrink-0">
+        <a :href="getChannelUrl()" target="_blank">
+          <img
+            :src="channel.snippet.thumbnails.default.url"
+            :alt="channel.snippet.title"
+            class="object-contain"
+          />
+        </a>
+        <div
+          class="absolute text-nowrap bg-black bg-opacity-60 text-md text-white flex items-center justify-center px-1.5 py-0.5 opacity-0 transition-opacity duration-300 group-hover:opacity-100 rounded-xs"
+        >
+          <p class="text-center">{{ channel.snippet.title }}</p>
+        </div>
+      </div>
       <div>
         <h2 class="text-md line-clamp-3">
           <a :href="getVideoUrl()" target="_blank">{{ video.snippet.title }}</a>
