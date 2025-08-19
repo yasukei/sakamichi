@@ -294,6 +294,25 @@ const saveUntagsDictForEachChannel = (tagsForEachChannel: Dict<VideoTags[]>) => 
   })
 }
 
+const displayStats = (channels: Channel[], videos: Video[], hinatazakaVideos: Video[]) => {
+  console.info('Stats:')
+  console.info('  Channels:')
+  channels.forEach((channel) => {
+    const allVideos = videos.filter((video) => video.snippet.channelId === channel.id)
+    const memberVideos = hinatazakaVideos.filter((video) => video.snippet.channelId === channel.id)
+    console.info(`    ${channel.id}, ${channel.snippet.title}`)
+    console.info(`      all videos:    [${allVideos.length}]`)
+    console.info(
+      `      member videos: [${memberVideos.length.toString().padStart(allVideos.length.toString().length)}]`,
+    )
+  })
+  console.info('  Videos:')
+  console.info(`    all videos:    [${videos.length}]`)
+  console.info(
+    `    member videos: [${hinatazakaVideos.length.toString().padStart(videos.length.toString().length)}]`,
+  )
+}
+
 const main = async () => {
   try {
     program.option('-s, --skipGettingYoutubeData').parse()
@@ -354,6 +373,8 @@ const main = async () => {
       saveAsJson(savingFile.filePath, savingFile.content)
     })
     saveUntagsDictForEachChannel(defaultTagsForEachChannel)
+
+    displayStats(channels, videos, hinatazakaVideos)
   } catch (error) {
     // console.error(error)
     throw error
