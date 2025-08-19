@@ -187,6 +187,8 @@ const getDataFromYoutubeApi = async (youtubeApi: YoutubeApi, validChannelIds: st
   const channels = await youtubeApi.getChannels(validChannelIds)
 
   const videos = await channels.reduce<Promise<Video[]>>(async (accumulator, channel) => {
+    console.info(`Getting data from ${channel.id}, ${channel.snippet.title}`)
+
     const filePath = `${VIDEOS_DICT_DIR}/${channel.id}${VIDEOS_SUFFIX}`
     const videosInLocalFile = loadVideosFromLocal(filePath)
     const cache = makeDict(videosInLocalFile, 'id')
