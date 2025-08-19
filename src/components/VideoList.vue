@@ -28,12 +28,11 @@ function contain(superset: Set<string>, subset: Set<string>): boolean {
 }
 
 const containSelectedTags = (video: Video) => {
-  const tags = jsonDataStore
-    .getTags(video.id)
-    .concat([jsonDataStore.getChannelTitle(video.snippet.channelId)])
-  const tagsSet = new Set<string>(tags)
+  const tagsOfTheVideo = new Set<string>(jsonDataStore.getTags(video.id))
+  const channelTitle = jsonDataStore.getChannelTitle(video.snippet.channelId)
+  tagsOfTheVideo.add(channelTitle)
 
-  return contain(tagsSet, selectedTagsStore.selectedTags)
+  return contain(tagsOfTheVideo, selectedTagsStore.selectedTags)
 }
 
 const perPage = 20
