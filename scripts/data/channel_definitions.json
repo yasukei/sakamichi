@@ -18,6 +18,12 @@
     "isValid": true
   },
   {
+    "name": "テレビ神奈川 tvk3ch",
+    "channelId": "UCtDEkfJlNHq_ONjQnsX5YeA",
+    "isOfficial": false,
+    "isValid": true
+  },
+  {
     "name": "TSSオンデマンド",
     "channelId": "UCouV316ueTMMIlXvzKoe6kA",
     "isOfficial": false,
