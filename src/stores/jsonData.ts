@@ -54,19 +54,7 @@ export const useJsonDataStore = defineStore('jsonData', () => {
         return ['未分類']
       }
 
-      return tagsDict.value[videoId].tags.sort((a, b) => {
-        if (!(a in membersDict.value)) {
-          return 1
-        }
-        if (!(b in membersDict.value)) {
-          return -1
-        }
-
-        if (membersDict.value[a].batch != membersDict.value[b].batch) {
-          return membersDict.value[a].batch - membersDict.value[b].batch
-        }
-        return membersDict.value[a].order - membersDict.value[b].order
-      })
+      return tagsDict.value[videoId].tags
     }
   })
 

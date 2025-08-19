@@ -148,10 +148,37 @@ const loadTagsDict = (dirPath: string) => {
   }, {})
 }
 
+function sortTagsProperty(tagsDict: Dict<VideoTags>, members: Member[]) {
+  const membersDict = makeDict(members, 'name')
+
+  Object.values(tagsDict).forEach((videoTags: VideoTags) => {
+    videoTags.tags.sort((a, b) => {
+      try {
+        const memberA = membersDict[a]
+        const memberB = membersDict[b]
+        if (memberA.batch != membersDict[b].batch) {
+          return memberA.batch - memberB.batch
+        }
+        return memberA.order - memberB.order
+      } catch (error) {
+        console.error(`Error occured:`)
+        console.error(`  videoId: [${videoTags.videoId}]`)
+        console.error(`  a:       [${a}]`)
+        console.error(`  b:       [${b}]`)
+        console.error('Probably, the following VideoTags contains invalid data')
+        console.error(`${JSON.stringify(videoTags, null, '  ')}`)
+        throw error
+      }
+    })
+  })
+}
+
 const loadFiles = () => {
   const channelDefinitions = loadJson<ChannelDefinition[]>(CHANNEL_DEFINITIONS_JSON)
   const members = loadJson<Member[]>(MEMBERS_JSON)
+
   const tagsDict = loadTagsDict(TAGS_DICT_DIR_FOR_LOAD)
+  sortTagsProperty(tagsDict, members)
 
   const validChannelIds = channelDefinitions
     .filter((channelDefinition) => channelDefinition.isValid)
