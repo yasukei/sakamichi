@@ -38,7 +38,9 @@ const getDurationString = () => {
     <a :href="getVideoUrl()" target="_blank">
       <div class="relative">
         <img :src="video.snippet.thumbnails.medium.url" :alt="video.snippet.title" class="w-full" />
-        <div class="absolute bottom-1 right-1 p-0.25 bg-black opacity-90 text-white text-sm">
+        <div
+          class="absolute bottom-1 right-1 px-0.75 py-0.25 bg-black opacity-80 text-white text-sm rounded-xs"
+        >
           <p>{{ getDurationString() }}</p>
         </div>
       </div>
