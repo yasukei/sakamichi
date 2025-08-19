@@ -1,6 +1,61 @@
 [
   {
     "kind": "youtube#video",
+    "etag": "vLFK0BQQ1EvvWmk7yIEQTYiiQaw",
+    "id": "WqjRlbCPjSE",
+    "snippet": {
+      "publishedAt": "2025-08-19T09:28:44Z",
+      "channelId": "UCouV316ueTMMIlXvzKoe6kA",
+      "title": "【STU48のくらコン】苦労して手に入れた黒毛和牛のハンバーグに「うまみ～ん」ロングVer.　#stu48のくらコン #STU48 #岡田あずみ #曽川咲葵",
+      "description": "★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★\nテレビ新広島がオススメするエンタメ、イベントなどのコンテンツをお届けするチャンネルです。チャンネル登録、ぜひ宜しくお願いします。\n\n#テレビ新広島 #TSS \n\n★テレビ新広島のホームページ\nhttps://www.tss-tv.co.jp/\n\n★公式YouTubeチャンネル「広島ニュースTSS」\nhttps://www.youtube.com/channel/UC7_j...\n\n★カープ全力応援チャンネル\nhttps://www.youtube.com/channel/UCGtl...\n\n★海外発信番組「Japan in Motion」\nhttps://www.youtube.com/user/tvjimfr",
+      "thumbnails": {
+        "default": {
+          "url": "https://i.ytimg.com/vi/WqjRlbCPjSE/default.jpg",
+          "width": 120,
+          "height": 90
+        },
+        "medium": {
+          "url": "https://i.ytimg.com/vi/WqjRlbCPjSE/mqdefault.jpg",
+          "width": 320,
+          "height": 180
+        },
+        "high": {
+          "url": "https://i.ytimg.com/vi/WqjRlbCPjSE/hqdefault.jpg",
+          "width": 480,
+          "height": 360
+        },
+        "standard": {
+          "url": "https://i.ytimg.com/vi/WqjRlbCPjSE/sddefault.jpg",
+          "width": 640,
+          "height": 480
+        },
+        "maxres": {
+          "url": "https://i.ytimg.com/vi/WqjRlbCPjSE/maxresdefault.jpg",
+          "width": 1280,
+          "height": 720
+        }
+      },
+      "channelTitle": "TSSオンデマンド",
+      "categoryId": "24",
+      "liveBroadcastContent": "none",
+      "localized": {
+        "title": "【STU48のくらコン】苦労して手に入れた黒毛和牛のハンバーグに「うまみ～ん」ロングVer.　#stu48のくらコン #STU48 #岡田あずみ #曽川咲葵",
+        "description": "★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★\nテレビ新広島がオススメするエンタメ、イベントなどのコンテンツをお届けするチャンネルです。チャンネル登録、ぜひ宜しくお願いします。\n\n#テレビ新広島 #TSS \n\n★テレビ新広島のホームページ\nhttps://www.tss-tv.co.jp/\n\n★公式YouTubeチャンネル「広島ニュースTSS」\nhttps://www.youtube.com/channel/UC7_j...\n\n★カープ全力応援チャンネル\nhttps://www.youtube.com/channel/UCGtl...\n\n★海外発信番組「Japan in Motion」\nhttps://www.youtube.com/user/tvjimfr"
+      },
+      "defaultAudioLanguage": "ja"
+    },
+    "contentDetails": {
+      "duration": "PT29S",
+      "dimension": "2d",
+      "definition": "hd",
+      "caption": "false",
+      "licensedContent": true,
+      "contentRating": {},
+      "projection": "rectangular"
+    }
+  },
+  {
+    "kind": "youtube#video",
     "etag": "3-i-6M--9_su8v6ZYHBSNOuNpng",
     "id": "FpaDEJGXyzM",
     "snippet": {
