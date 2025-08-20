@@ -60,9 +60,12 @@ export const useJsonDataStore = defineStore('jsonData', () => {
 
   // Actions
   async function fetch() {
-    const baseUrl = window.origin + import.meta.env.BASE_URL
+    if (isLoaded.value) {
+      return
+    }
 
     try {
+      const baseUrl = window.origin + import.meta.env.BASE_URL
       const elems = [
         {
           url: baseUrl + 'membersDict.json',
