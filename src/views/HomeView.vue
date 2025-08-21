@@ -15,7 +15,7 @@ const jsonDataStore = useJsonDataStore()
 const selectedTagsStore = useSelectedTagsStore()
 
 onMounted(async () => {
-  await jsonDataStore.fetch()
+  await jsonDataStore.load()
 })
 </script>
 

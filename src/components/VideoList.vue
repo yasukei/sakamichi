@@ -28,9 +28,7 @@ function contain(superset: Set<string>, subset: Set<string>): boolean {
 }
 
 const containSelectedTags = (video: Video) => {
-  const tagsOfTheVideo = new Set<string>(jsonDataStore.getTags(video.id))
-  const channelTitle = jsonDataStore.getChannelTitle(video.snippet.channelId)
-  tagsOfTheVideo.add(channelTitle)
+  const tagsOfTheVideo = jsonDataStore.tagsSetDict[video.id].tags
 
   return contain(tagsOfTheVideo, selectedTagsStore.selectedTags)
 }

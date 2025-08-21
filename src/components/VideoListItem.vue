@@ -71,10 +71,7 @@ const getDurationString = () => {
         }}</time>
       </div>
     </div>
-    <TagList
-      :tags="[channel.snippet.title].concat(jsonDataStore.getTags(video.id))"
-      :canClick="true"
-    />
+    <TagList :tags="jsonDataStore.tagsDict[video.id].tags" :canClick="true" />
   </div>
 </template>
 

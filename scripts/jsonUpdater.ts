@@ -290,6 +290,30 @@ const filterUntaggedVideos = (videos: Video[], tagsDict: Dict<VideoTags>) => {
   return videos.filter((video) => !(video.id in tagsDict))
 }
 
+const assignUntaggedOnUntaggedVideos = (untaggedVideos: Video[], tagsDict: Dict<VideoTags>) => {
+  untaggedVideos.forEach((untaggedVideo) => {
+    const videoTags: VideoTags = {
+      videoId: untaggedVideo.id,
+      tags: ['未分類'],
+    }
+    tagsDict[untaggedVideo.id] = videoTags
+  })
+}
+
+const addChannelTitleIntoVideoTags = (
+  channels: Channel[],
+  videos: Video[],
+  tagsDict: Dict<VideoTags>,
+) => {
+  const channelsDict = makeDict(channels, 'id')
+
+  videos.forEach((video) => {
+    const channel = channelsDict[video.snippet.channelId]
+    const channelTitle = channel.snippet.title
+    tagsDict[video.id].tags = [channelTitle, ...tagsDict[video.id].tags]
+  })
+}
+
 const makeDefaultTagsForEachChannel = (videos: Video[], members: Member[]): Dict<VideoTags[]> => {
   const defaultTagsForEachChannel = videos.reduce((accumulator, video) => {
     const membersInTheVideo = members.filter((member) => containsKeyword(video, member.name))
@@ -373,6 +397,12 @@ const main = async () => {
 
     console.info('Filtering untagged vidoes')
     const untaggedVideos = filterUntaggedVideos(hinatazakaVideos, tagsDict)
+
+    console.info("Adding '未分類' onto untagged vidoes")
+    assignUntaggedOnUntaggedVideos(untaggedVideos, tagsDict)
+
+    console.info('Adding channel title into tagsDict')
+    addChannelTitleIntoVideoTags(channels, hinatazakaVideos, tagsDict)
 
     console.info('Making default tags for untagged vidoes for each channel')
     const defaultTagsForEachChannel = makeDefaultTagsForEachChannel(untaggedVideos, members)

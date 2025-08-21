@@ -1,9 +1,45 @@
 import axios from 'axios'
+
 import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
 
 import type { Dict, Member, VideoTags } from '../../types/sakamichi'
 import type { Channel, Video } from '../../types/youtube'
+
+async function fetchJson() {
+  try {
+    const baseUrl = window.origin + import.meta.env.BASE_URL
+    const promises = [
+      axios.get<Dict<Member>>(baseUrl + 'membersDict.json'),
+      axios.get<Dict<Channel>>(baseUrl + 'channelsDict.json'),
+      axios.get<Dict<Video>>(baseUrl + 'videosDict.json'),
+      axios.get<Dict<VideoTags>>(baseUrl + 'tagsDict.json'),
+    ]
+    const [res0, res1, res2, res3] = await Promise.all(promises)
+
+    const _membersDict = res0.data as Dict<Member>
+    const _channelsDict = res1.data as Dict<Channel>
+    const _videosDict = res2.data as Dict<Video>
+    const _videoTagsDict = res3.data as Dict<VideoTags>
+
+    return {
+      _membersDict,
+      _channelsDict,
+      _videosDict,
+      _videoTagsDict,
+    }
+  } catch (error) {
+    // TODO: error handling
+    throw error
+  }
+}
+
+export interface TagsSet {
+  videoId: string
+  tags: Set<string>
+}
+
+export type TagsSetDict = Record<string, TagsSet>
 
 export const useJsonDataStore = defineStore('jsonData', () => {
   // States
@@ -23,8 +59,20 @@ export const useJsonDataStore = defineStore('jsonData', () => {
   const videos = computed(() => {
     return Object.values(videosDict.value)
   })
-  const tags = computed(() => {
-    return Object.values(tagsDict.value)
+  const tagsSetDict = computed(() => {
+    const tagsSetDict = Object.values(tagsDict.value).reduce(
+      (accumulator, videoTags: VideoTags) => {
+        const tagsSet = {
+          videoId: videoTags.videoId,
+          tags: new Set(videoTags.tags),
+        }
+        accumulator[videoTags.videoId] = tagsSet
+        return accumulator
+      },
+      {} as TagsSetDict,
+    )
+
+    return tagsSetDict
   })
   const getXbatchMembers = computed(() => {
     return (batch: number, graduated: boolean): Member[] => {
@@ -48,52 +96,20 @@ export const useJsonDataStore = defineStore('jsonData', () => {
       return channels.value.map((channel) => channel.snippet.title)
     }
   })
-  const getTags = computed(() => {
-    return (videoId: string): string[] => {
-      if (!(videoId in tagsDict.value)) {
-        return ['未分類']
-      }
-
-      return tagsDict.value[videoId].tags
-    }
-  })
 
   // Actions
-  async function fetch() {
+  async function load() {
     if (isLoaded.value) {
       return
     }
 
-    try {
-      const baseUrl = window.origin + import.meta.env.BASE_URL
-      const elems = [
-        {
-          url: baseUrl + 'membersDict.json',
-          dict: membersDict,
-        },
-        {
-          url: baseUrl + 'channelsDict.json',
-          dict: channelsDict,
-        },
-        {
-          url: baseUrl + 'videosDict.json',
-          dict: videosDict,
-        },
-        {
-          url: baseUrl + 'tagsDict.json',
-          dict: tagsDict,
-        },
-      ]
-      const promises = elems.map(async (elem) => {
-        const response = await axios.get(elem.url)
-        elem.dict.value = response.data
-      })
-      await Promise.all(promises)
-      isLoaded.value = true
-    } catch (error) {
-      // TODO: error handling
-      throw error
-    }
+    const { _membersDict, _channelsDict, _videosDict, _videoTagsDict } = await fetchJson()
+
+    membersDict.value = _membersDict
+    channelsDict.value = _channelsDict
+    videosDict.value = _videosDict
+    tagsDict.value = _videoTagsDict
+    isLoaded.value = true
   }
 
   return {
@@ -105,12 +121,11 @@ export const useJsonDataStore = defineStore('jsonData', () => {
     members,
     channels,
     videos,
-    tags,
+    tagsSetDict,
     getXbatchMembers,
     getXbatchNames,
     getChannelTitle,
     getChannelTitles,
-    getTags,
-    fetch,
+    load,
   }
 })
