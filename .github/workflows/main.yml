@@ -37,13 +37,16 @@ jobs:
       - id: 'auth'
         uses: 'google-github-actions/auth@v2'
         with:
-          workload_identity_provider: 'projects/382365512218/locations/global/workloadIdentityPools/github-yasukei-sakamichi/providers/github'
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
+          workload_identity_provider: ${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER }}
       - name: 'Set up Cloud SDK'
         uses: 'google-github-actions/setup-gcloud@v2'
         with:
           version: '>= 363.0.0'
       - name: 'Use gcloud CLI'
         run: 'gcloud info'
+      - name: 'Copy *_videos.json from Cloud Storage'
+        run: 'mkdir -p temp && gcloud storage cp gs://yasukei-sakamichi-videos/*_videos.json temp/ && ls -al temp'
 
       - name: Set up Node
         uses: actions/setup-node@v4
