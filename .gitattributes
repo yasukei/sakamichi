@@ -1,4 +1,1 @@
 * text=auto eol=lf
-scripts/data/videos/UCtDEkfJlNHq_ONjQnsX5YeA_videos.json filter=lfs diff=lfs merge=lfs -text
-scripts/data/videos/UCaMuCIUszPKEx8966ZCVfGw_videos.json filter=lfs diff=lfs merge=lfs -text
-scripts/data/videos/UCFLpS7vAGxlNgL0ZorC8oUw_videos.json filter=lfs diff=lfs merge=lfs -text
