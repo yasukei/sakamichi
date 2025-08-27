@@ -13,6 +13,7 @@
     "type-check": "vue-tsc --build",
     "lint": "eslint . --fix",
     "format": "prettier --write src/",
+    "download": "gcloud storage cp gs://yasukei-sakamichi-videos/*_videos.json scripts/data/videos/",
     "update": "touch .env && tsx --env-file .env scripts/jsonUpdater.ts"
   },
   "dependencies": {
