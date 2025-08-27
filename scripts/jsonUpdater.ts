@@ -14,8 +14,8 @@ const VIDEOS_SUFFIX = '_videos.json'
 const EXCLUDE_VIDEO_IDS_SUFFIX = '_excludeVideoIds.json'
 
 // dir paths
-const TAGS_DICT_DIR_FOR_LOAD = DIR_PATH + 'data/tagsDict/'
-const UNTAGS_DICT_DIR = DIR_PATH + 'data/tagsDict/'
+const TAGS_DICT_DIR_FOR_LOAD = DIR_PATH + 'data/videos/'
+const UNTAGS_DICT_DIR = DIR_PATH + 'data/videos/'
 const VIDEOS_DICT_DIR = DIR_PATH + 'data/videos/'
 const EXCLUDE_VIDEO_IDS_DIR = DIR_PATH + 'data/videos/'
 
