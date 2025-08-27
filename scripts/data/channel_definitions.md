@@ -37,6 +37,7 @@
     - 愛知
       - テレビ愛知
         - 【公式】テレビ愛知 TV Aichi, UCaMuCIUszPKEx8966ZCVfGw
+        - TVAスポーツ CH【テレビ愛知公式】, UCNdcN2Bl2_DPV8vrnQ1d94A
       - 中京テレビ
         - 中京テレビ 公式チャンネル, UCztK-7QCpN1VmQblQ0eqtKQ
         - 中京テレビNEWS, UCxiRdfyH0FtFCRZTRfRsdsA
