@@ -214,7 +214,7 @@ const getDataFromYoutubeApi = async (youtubeApi: YoutubeApi, validChannelIds: st
   const channels = await youtubeApi.getChannels(validChannelIds)
 
   const videos = await channels.reduce<Promise<Video[]>>(async (accumulator, channel) => {
-    console.info(`Getting data from ${channel.id}, ${channel.snippet.title}`)
+    const log = [`Getting data from ${channel.id}, ${channel.snippet.title}`]
 
     const filePath = `${VIDEOS_DICT_DIR}/${channel.id}${VIDEOS_SUFFIX}`
     const videosInLocalFile = loadVideosFromLocal(filePath)
@@ -235,6 +235,8 @@ const getDataFromYoutubeApi = async (youtubeApi: YoutubeApi, validChannelIds: st
     )
     const videoIds = playlistItems.map((item) => item.contentDetails.videoId)
     const videosFromYoutube = await youtubeApi.getVideos(videoIds)
+    log.push(`  videos in local file:    [${videosInLocalFile.length}]`)
+    log.push(`  new videos from Youtube: [${videosFromYoutube.length}]`)
 
     const videosInThisChannel = [...videosFromYoutube, ...videosInLocalFile]
     saveVideosToLocal(filePath, videosInThisChannel)
@@ -246,6 +248,8 @@ const getDataFromYoutubeApi = async (youtubeApi: YoutubeApi, validChannelIds: st
 
     const videosInAllChannels = await accumulator
     videosInAllChannels.push(...videosWithoutExcludeVideoIds)
+
+    console.info(log.join('\n'))
     return videosInAllChannels
   }, Promise.resolve([]))
 
@@ -345,22 +349,34 @@ const saveUntagsDictForEachChannel = (tagsForEachChannel: Dict<VideoTags[]>) => 
   })
 }
 
-const displayStats = (channels: Channel[], videos: Video[], hinatazakaVideos: Video[]) => {
+const displayStats = (
+  channels: Channel[],
+  allVideos: Video[],
+  hinatazakaVideos: Video[],
+  untaggedVideos: Video[],
+) => {
   console.info('Stats:')
   console.info('  Channels:')
   channels.forEach((channel) => {
-    const allVideos = videos.filter((video) => video.snippet.channelId === channel.id)
+    const _allVideos = allVideos.filter((video) => video.snippet.channelId === channel.id)
     const memberVideos = hinatazakaVideos.filter((video) => video.snippet.channelId === channel.id)
+    const _untaggedVideos = untaggedVideos.filter((video) => video.snippet.channelId === channel.id)
     console.info(`    ${channel.id}, ${channel.snippet.title}`)
-    console.info(`      all videos:    [${allVideos.length}]`)
+    console.info(`      all videos:      [${_allVideos.length}]`)
     console.info(
-      `      member videos: [${memberVideos.length.toString().padStart(allVideos.length.toString().length)}]`,
+      `      member videos:   [${memberVideos.length.toString().padStart(_allVideos.length.toString().length)}]`,
+    )
+    console.info(
+      `      untagged videos: [${_untaggedVideos.length.toString().padStart(_allVideos.length.toString().length)}]`,
     )
   })
   console.info('  Videos:')
-  console.info(`    all videos:    [${videos.length}]`)
+  console.info(`    all videos:      [${allVideos.length}]`)
   console.info(
-    `    member videos: [${hinatazakaVideos.length.toString().padStart(videos.length.toString().length)}]`,
+    `    member videos:   [${hinatazakaVideos.length.toString().padStart(allVideos.length.toString().length)}]`,
+  )
+  console.info(
+    `    untagged videos: [${untaggedVideos.length.toString().padStart(allVideos.length.toString().length)}]`,
   )
 }
 
@@ -431,7 +447,7 @@ const main = async () => {
     })
     saveUntagsDictForEachChannel(defaultTagsForEachChannel)
 
-    displayStats(channels, videos, hinatazakaVideos)
+    displayStats(channels, videos, hinatazakaVideos, untaggedVideos)
   } catch (error) {
     // console.error(error)
     throw error
