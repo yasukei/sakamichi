@@ -16,9 +16,14 @@ const getChannelUrl = () => {
   return 'https://www.youtube.com/channel/' + channel.id
 }
 const getVideoUrl = () => {
+  const title = props.video.snippet.title
+  const duration = props.video.contentDetails.duration
   const isShorts =
-    props.video.snippet.title.toLowerCase().indexOf('shorts') >= 0 ||
-    props.video.contentDetails.duration?.indexOf('M') === -1
+    title.toLowerCase().indexOf('shorts') >= 0 ||
+    (duration !== undefined &&
+      (duration.indexOf('M') === -1 ||
+        duration.indexOf('PT1M') >= 0 ||
+        duration.indexOf('PT2M') >= 0)) // less than 3 minutes
 
   if (isShorts) {
     return 'https://www.youtube.com/shorts/' + props.video.id
