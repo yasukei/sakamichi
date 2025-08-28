@@ -18,6 +18,4 @@ export interface VideoTags {
   tags: string[]
 }
 
-export interface Dict<T> {
-  [key: string]: T
-}
+export type Dict<T> = Record<string, T>
