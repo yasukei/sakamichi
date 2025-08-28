@@ -2,7 +2,7 @@ import fs from 'fs'
 
 import { program } from 'commander'
 
-import type { Channel, PlayListItem, Video } from '../types/youtube'
+import type { Channel, MinifiedChannel, PlayListItem, Video, MinifiedVideo } from '../types/youtube'
 import type { ChannelDefinition, Member, VideoTags, Dict } from '../types/sakamichi'
 import { YoutubeApi } from './youtubeApi'
 
@@ -61,36 +61,29 @@ function containsKeyword(video: Video, keyword: string) {
   return title.includes(keyword) || description.includes(keyword)
 }
 
-function getChannelForSave(channel: Channel): Channel {
+function minifyChannel(channel: Channel): MinifiedChannel {
   return {
     id: channel.id,
     snippet: {
       title: channel.snippet.title,
-      description: channel.snippet.description,
       thumbnails: {
         default: channel.snippet.thumbnails.default,
-      },
-    },
-    contentDetails: {
-      relatedPlaylists: {
-        uploads: channel.contentDetails.relatedPlaylists.uploads,
       },
     },
   }
 }
 
-function getChannelsForSave(channels: Channel[]): Channel[] {
-  return channels.map((channel) => getChannelForSave(channel))
+function minifyChannels(channels: Channel[]): MinifiedChannel[] {
+  return channels.map((channel) => minifyChannel(channel))
 }
 
-function getVideoForSave(video: Video): Video {
+function minifyVideo(video: Video): MinifiedVideo {
   return {
     id: video.id,
     snippet: {
       publishedAt: video.snippet.publishedAt,
       channelId: video.snippet.channelId,
       title: video.snippet.title,
-      description: video.snippet.description,
       thumbnails: {
         medium: video.snippet.thumbnails.medium,
       },
@@ -101,8 +94,8 @@ function getVideoForSave(video: Video): Video {
   }
 }
 
-function getVideosForSave(videos: Video[]): Video[] {
-  return videos.map((video) => getVideoForSave(video))
+function minifyVideos(videos: Video[]): MinifiedVideo[] {
+  return videos.map((video) => minifyVideo(video))
 }
 
 function getVideoTagsForSave(videoTags: VideoTags): VideoTags {
@@ -431,11 +424,11 @@ const main = async () => {
       },
       {
         filePath: CHANNELS_DICT_JSON,
-        content: makeDict(getChannelsForSave(channels), 'id'),
+        content: makeDict(minifyChannels(channels), 'id'),
       },
       {
         filePath: VIDEOS_DICT_JSON,
-        content: makeDict(getVideosForSave(hinatazakaVideos), 'id'),
+        content: makeDict(minifyVideos(hinatazakaVideos), 'id'),
       },
       {
         filePath: TAGS_DICT_JSON_FOR_SAVE,

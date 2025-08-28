@@ -4,22 +4,22 @@ import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
 
 import type { Dict, Member, VideoTags } from '../../types/sakamichi'
-import type { Channel, Video } from '../../types/youtube'
+import type { MinifiedChannel, MinifiedVideo } from '../../types/youtube'
 
 async function fetchJson() {
   try {
     const baseUrl = window.origin + import.meta.env.BASE_URL
     const promises = [
       axios.get<Dict<Member>>(baseUrl + 'membersDict.json'),
-      axios.get<Dict<Channel>>(baseUrl + 'channelsDict.json'),
-      axios.get<Dict<Video>>(baseUrl + 'videosDict.json'),
+      axios.get<Dict<MinifiedChannel>>(baseUrl + 'channelsDict.json'),
+      axios.get<Dict<MinifiedVideo>>(baseUrl + 'videosDict.json'),
       axios.get<Dict<VideoTags>>(baseUrl + 'tagsDict.json'),
     ]
     const [res0, res1, res2, res3] = await Promise.all(promises)
 
     const _membersDict = res0.data as Dict<Member>
-    const _channelsDict = res1.data as Dict<Channel>
-    const _videosDict = res2.data as Dict<Video>
+    const _channelsDict = res1.data as Dict<MinifiedChannel>
+    const _videosDict = res2.data as Dict<MinifiedVideo>
     const _videoTagsDict = res3.data as Dict<VideoTags>
 
     return {
@@ -44,8 +44,8 @@ export type TagsSetDict = Record<string, TagsSet>
 export const useJsonDataStore = defineStore('jsonData', () => {
   // States
   const membersDict = ref<Dict<Member>>({})
-  const channelsDict = ref<Dict<Channel>>({})
-  const videosDict = ref<Dict<Video>>({}) // TODO: initialize vidoesDict-1.json and so on
+  const channelsDict = ref<Dict<MinifiedChannel>>({})
+  const videosDict = ref<Dict<MinifiedVideo>>({}) // TODO: initialize vidoesDict-1.json and so on
   const tagsDict = ref<Dict<VideoTags>>({})
   const isLoaded = ref(false)
 

@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import type { Video } from '../../types/youtube.d.ts'
+import type { MinifiedVideo } from '../../types/youtube.d.ts'
 import { formatDateString, formatTimeString } from '@/utils.ts'
 import TagList from '@/components/TagList.vue'
 import { useJsonDataStore } from '@/stores/jsonData'
 
 interface Props {
-  video: Video
+  video: MinifiedVideo
 }
 const props = defineProps<Props>()
 

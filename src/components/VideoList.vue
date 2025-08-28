@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Video } from '../../types/youtube.d.ts'
+import type { MinifiedVideo } from '../../types/youtube.d.ts'
 import { useJsonDataStore } from '@/stores/jsonData'
 import { useSelectedTagsStore } from '@/stores/selectedTags.ts'
 import VideoListItem from './VideoListItem.vue'
@@ -7,7 +7,7 @@ import InfiniteScroll from './InfiniteScroll.vue'
 import { ref } from 'vue'
 
 interface Props {
-  videos: Video[]
+  videos: MinifiedVideo[]
 }
 const props = defineProps<Props>()
 
@@ -27,7 +27,7 @@ function contain(superset: Set<string>, subset: Set<string>): boolean {
   return true
 }
 
-const containSelectedTags = (video: Video) => {
+const containSelectedTags = (video: MinifiedVideo) => {
   const tagsOfTheVideo = jsonDataStore.tagsSetDict[video.id].tags
 
   return contain(tagsOfTheVideo, selectedTagsStore.selectedTags)
@@ -35,7 +35,7 @@ const containSelectedTags = (video: Video) => {
 
 const perPage = 20
 const lastItemIndex = ref(perPage)
-const videoItems = ref<Video[]>(props.videos.slice(0, lastItemIndex.value))
+const videoItems = ref<MinifiedVideo[]>(props.videos.slice(0, lastItemIndex.value))
 
 const fetchItems = (resolve: (hasMoreData: boolean) => void) => {
   setTimeout(() => {

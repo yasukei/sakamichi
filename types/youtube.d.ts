@@ -20,6 +20,16 @@ export interface Channel {
   }
 }
 
+export interface MinifiedChannel {
+  id: string
+  snippet: {
+    title: string
+    thumbnails: {
+      default: Thumbnail
+    }
+  }
+}
+
 export interface ChannelsResponse {
   items: Channel[]
 }
@@ -49,6 +59,21 @@ export interface Video {
     channelId: string
     title: string
     description: string
+    thumbnails: {
+      medium: Thumbnail
+    }
+  }
+  contentDetails: {
+    duration?: string // It becomes undefined when the video is scheduled to be published
+  }
+}
+
+export interface MinifiedVideo {
+  id: string
+  snippet: {
+    publishedAt: string
+    channelId: string
+    title: string
     thumbnails: {
       medium: Thumbnail
     }
