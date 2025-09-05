@@ -58,5 +58,83 @@
     "channelId": "UCahRezMHsbBWG_4yRnNQhbA",
     "isOfficial": false,
     "isValid": true
+  },
+  {
+    "name": "ViVi channel",
+    "channelId": "UCphXm7TyJKC1IQWrSed8C2w",
+    "isOfficial": false,
+    "isValid": false
+  },
+  {
+    "name": "sweet channel",
+    "channelId": "UC4rgSFUaqlC54h-1Gkvm1rA",
+    "isOfficial": false,
+    "isValid": true
+  },
+  {
+    "name": "bis Channel",
+    "channelId": "UC03MdgLiv5djOqUsv9QwEGw",
+    "isOfficial": false,
+    "isValid": true
+  },
+  {
+    "name": "Seventeen／セブンティーン",
+    "channelId": "UCRILJB5Cy5Qd33h_f61f1Vg",
+    "isOfficial": false,
+    "isValid": true
+  },
+  {
+    "name": "non-no",
+    "channelId": "UCkhP9BdY7DepF69ywZZ9JMw",
+    "isOfficial": false,
+    "isValid": true
+  },
+  {
+    "name": "CanCam",
+    "channelId": "UCibcCKODsjYLMYjKVs145Cg",
+    "isOfficial": false,
+    "isValid": true
+  },
+  {
+    "name": "Ray TV",
+    "channelId": "UCgPn6By2enuKrrwRpczU5cA",
+    "isOfficial": false,
+    "isValid": true
+  },
+  {
+    "name": "ar channel(アールチャンネル)",
+    "channelId": "UCjQL5O3wfFTdq34K9gAj2tA",
+    "isOfficial": false,
+    "isValid": false
+  },
+  {
+    "name": "BAILA",
+    "channelId": "UC6jzAiPKIbLnT0BDts-mIlA",
+    "isOfficial": false,
+    "isValid": false
+  },
+  {
+    "name": "バイラ チャンネル",
+    "channelId": "UC-hQsIrkum6AtKXyC_n9d4Q",
+    "isOfficial": false,
+    "isValid": false
+  },
+  {
+    "name": "JJ official",
+    "channelId": "UC3dH_0X6Uwu5Yy3tZLEm_aQ",
+    "isOfficial": false,
+    "isValid": true
+  },
+  {
+    "name": "MEN'S NON-NO　メンズノンノ【公式】",
+    "channelId": "UC0sKRWLg-w8bpP7knY8-Bmw",
+    "isOfficial": false,
+    "isValid": true
+  },
+  {
+    "name": "FLASHスペシャル",
+    "channelId": "UC6ls6suipQM6a04EG9DA5Gg",
+    "isOfficial": false,
+    "isValid": true
   }
 ]
