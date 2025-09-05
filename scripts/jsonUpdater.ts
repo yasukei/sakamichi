@@ -63,11 +63,15 @@ function removeAllWhiteSpace(text: string) {
   return text.replace(/\s/g, '')
 }
 
-function containsKeyword(video: Video, keyword: string) {
+function containsKeywords(video: Video, keywords: string[]) {
   const title = removeAllWhiteSpace(video.snippet.title)
   const description = removeAllWhiteSpace(video.snippet.description)
 
-  return title.includes(keyword) || description.includes(keyword)
+  const result = keywords.some((keyword) => {
+    return title.includes(keyword) || description.includes(keyword)
+  })
+
+  return result
 }
 
 function minifyChannel(channel: Channel): MinifiedChannel {
@@ -284,6 +288,7 @@ const filterHinatazakaVideos = (
   members: Member[],
 ) => {
   const channelDefinitionsDict = makeDict(channelDefinitions, 'channelId')
+  const keywords = ['日向坂', ...members.map((member) => member.name)]
 
   const hinatazakaVideos = videos.filter((video) => {
     const channelDefinition = channelDefinitionsDict[video.snippet.channelId]
@@ -291,10 +296,7 @@ const filterHinatazakaVideos = (
       return true
     }
 
-    if (containsKeyword(video, '日向坂')) {
-      return true
-    }
-    return members.some((member) => containsKeyword(video, member.name))
+    return containsKeywords(video, keywords)
   })
 
   return hinatazakaVideos
@@ -330,7 +332,7 @@ const addChannelTitleIntoVideoTags = (
 
 const makeDefaultTagsForEachChannel = (videos: Video[], members: Member[]): Dict<VideoTags[]> => {
   const defaultTagsForEachChannel = videos.reduce((accumulator, video) => {
-    const membersInTheVideo = members.filter((member) => containsKeyword(video, member.name))
+    const membersInTheVideo = members.filter((member) => containsKeywords(video, [member.name]))
 
     const defaultTags = {
       title: video.snippet.title,
