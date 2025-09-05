@@ -50,6 +50,15 @@ function makeDict<T>(array: T[], keyMemberName: string): Dict<T> {
   return dict
 }
 
+function sortByPublishedAtDesc(a: Video, b: Video) {
+  if (a.snippet.publishedAt < b.snippet.publishedAt) {
+    return 1
+  } else if (a.snippet.publishedAt > b.snippet.publishedAt) {
+    return -1
+  }
+  return 0
+}
+
 function removeAllWhiteSpace(text: string) {
   return text.replace(/\s/g, '')
 }
@@ -207,7 +216,7 @@ const getDataFromYoutubeApi = async (youtubeApi: YoutubeApi, validChannelIds: st
   const channels = await youtubeApi.getChannels(validChannelIds)
 
   const videos = await channels.reduce<Promise<Video[]>>(async (accumulator, channel) => {
-    const log = [`Getting data from ${channel.id}, ${channel.snippet.title}`]
+    const log = [`  [${channel.id}, ${channel.snippet.title}]`]
 
     const filePath = `${VIDEOS_DICT_DIR}/${channel.id}${VIDEOS_SUFFIX}`
     const videosInLocalFile = loadVideosFromLocal(filePath)
@@ -215,7 +224,17 @@ const getDataFromYoutubeApi = async (youtubeApi: YoutubeApi, validChannelIds: st
 
     const playListItemValidator = (playlistItems: PlayListItem[]) => {
       const itemsToBeAdded = playlistItems.filter((playlistItem) => {
-        return !(playlistItem.contentDetails.videoId in cache)
+        const videoId = playlistItem.contentDetails.videoId
+        if (!(videoId in cache)) {
+          log.push(`    new video:          ${videoId}, ${playlistItem.snippet.title}`)
+          return true
+        }
+        const duration = cache[videoId].contentDetails.duration
+        if (duration === undefined || duration === 'P0D') {
+          log.push(`    undefined duration: ${videoId}, ${playlistItem.snippet.title}`)
+          return true
+        }
+        return false
       })
       return {
         itemsToBeAdded: itemsToBeAdded,
@@ -228,10 +247,17 @@ const getDataFromYoutubeApi = async (youtubeApi: YoutubeApi, validChannelIds: st
     )
     const videoIds = playlistItems.map((item) => item.contentDetails.videoId)
     const videosFromYoutube = await youtubeApi.getVideos(videoIds)
-    log.push(`  videos in local file:    [${videosInLocalFile.length}]`)
-    log.push(`  new videos from Youtube: [${videosFromYoutube.length}]`)
+    log.push(`    videos from Youtube:      [${videosFromYoutube.length}]`)
+    log.push(`    videos in local file:     [${videosInLocalFile.length}]`)
 
-    const videosInThisChannel = [...videosFromYoutube, ...videosInLocalFile]
+    const videoIdsFromYoutube = new Set(videoIds)
+    const videosInThisChannel = [
+      ...videosFromYoutube,
+      ...videosInLocalFile.filter((video: Video) => {
+        return !videoIdsFromYoutube.has(video.id)
+      }),
+    ]
+    videosInThisChannel.sort(sortByPublishedAtDesc)
     saveVideosToLocal(filePath, videosInThisChannel)
 
     const excludeVideoIdsSet = loadExcludeVideoIdsSet(channel.id)
@@ -272,15 +298,6 @@ const filterHinatazakaVideos = (
   })
 
   return hinatazakaVideos
-}
-
-const sortByPublishedAtDesc = (a: Video, b: Video) => {
-  if (a.snippet.publishedAt < b.snippet.publishedAt) {
-    return 1
-  } else if (a.snippet.publishedAt > b.snippet.publishedAt) {
-    return -1
-  }
-  return 0
 }
 
 const filterUntaggedVideos = (videos: Video[], tagsDict: Dict<VideoTags>) => {
